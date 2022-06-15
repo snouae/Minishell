@@ -1,0 +1,15 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/snouae/Desktop/Minishell'
+gcc  -c main.c -o main.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  -c tools.c -o tools.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  -c ft_lexer.c -o ft_lexer.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  -c check_syntax.c -o check_syntax.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  -c parser.c -o parser.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  -c check_command.c -o check_command.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  -c ft_split.c -o ft_split.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  -c expander.c -o expander.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  -c ft_riderct.c -o ft_riderct.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+gcc  main.o tools.o ft_lexer.o check_syntax.o parser.o check_command.o ft_split.o expander.o ft_riderct.o -lreadline -L/goinfre/snouae/.brew/opt/readline/lib  -o minishell
+rm -rf main.o tools.o ft_lexer.o check_syntax.o parser.o check_command.o ft_split.o expander.o ft_riderct.o
+make: Leaving directory `/Users/snouae/Desktop/Minishell'
+ 
