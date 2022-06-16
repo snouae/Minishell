@@ -110,12 +110,17 @@ void ft_mark_dollar(char *line, int *i, int type, t_list **head)
 
     start = *i;
     (*i)++;
-    while (line[*i] != double_quo && line[*i] != ' ' && line[*i] != tab &&
-        line[*i] && line[*i] !=  dollar && search_token(line[*i]) == -1 &&
-        !cherche_symbol(line[*i],"\t!%'()*+,-./:;<=>?@[]^`{|}~"))
-          (*i)++;
-    (*i)--;
-    ft_lstadd_back(head, ft_add(line, start, *i, type));
+    if(line[*i + 1] <= '9' && line[*i + 1] >= '0')
+        ft_lstadd_back(head, ft_add(line, start, *i, type));
+    else
+    {
+        while (line[*i] != double_quo && line[*i] != ' ' && line[*i] != tab &&
+            line[*i] && line[*i] !=  dollar && search_token(line[*i]) == -1 &&
+            !cherche_symbol(line[*i],"\t!%'()*+,-./:;<=>?@[]^`{|}~"))
+                (*i)++;
+        (*i)--;
+        ft_lstadd_back(head, ft_add(line, start, *i, type));
+    }
 }
 
 void ft_mark(char *line, int *i, int type, t_list **head)

@@ -227,7 +227,7 @@ int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
    {
       if((*tmp)->next)
          t = 1;
-         if((*tmp)->str && (*tmp)->str[1] != '\0' && t && (*tmp)->next->type == double_quo)
+         if((*tmp)->str && (*tmp)->str[1] != '\0' && (*tmp)->str[1] != '0' || (t && (*tmp)->next->type == double_quo))
          {
             tmps = (*tmp)->str;
             tmps1 = expander(tmps, env);
@@ -236,6 +236,8 @@ int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
         }
         else if ((*tmp)->str[1] == '\0' && t && (*tmp)->next->type != double_quo)
             *join = ft_strjoin(*join, (*tmp)->str);
+         else if ((*tmp)->str[1] == '0')
+         *join = ft_strjoin(*join, "minishell");
    }
    else if ((*tmp)->type == redirect_in || (*tmp)->type == redirect_out)
       ft_lstadd_back1(&cmd->redirect, fill_riderect((*tmp)->str, tmp, env));
