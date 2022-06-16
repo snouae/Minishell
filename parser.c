@@ -211,12 +211,29 @@ t_list *ft_count_args(t_list *current, int *count)
     }
     return (current);
 }
-
-int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
+void ft_handler_dollar(t_list **tmp, t_command *cmd, char **env, char **join)
 {
    char *tmps1, *tmps;
    int t = 0;
 
+   if((*tmp)->next)
+      t = 1;
+   if((*tmp)->str && (*tmp)->str[1] != '\0' && (*tmp)->str[1] != '0' 
+   || (t && (*tmp)->next->type == double_quo))
+   {
+      tmps = (*tmp)->str;
+      tmps1 = expander(tmps, env);
+      if(tmps1)
+         *join = ft_strjoin(*join, tmps1);
+   }
+   else if ((*tmp)->str[1] == '\0' && t && (*tmp)->next->type != double_quo)
+      *join = ft_strjoin(*join, (*tmp)->str);
+   else if ((*tmp)->str[1] == '0')
+   *join = ft_strjoin(*join, "minishell");
+}
+
+int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
+{
    if((*tmp)->type == -1)
       *join = ft_strjoin(*join, (*tmp)->str);
    else if ((*tmp)->type == single_quo)
@@ -224,21 +241,7 @@ int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
    else if ((*tmp)->type == double_quo)
       *join = ft_strjoin(*join, remove_double_quote((*tmp)->str, env));
    else if ((*tmp)->type == dollar)
-   {
-      if((*tmp)->next)
-         t = 1;
-         if((*tmp)->str && (*tmp)->str[1] != '\0' && (*tmp)->str[1] != '0' || (t && (*tmp)->next->type == double_quo))
-         {
-            tmps = (*tmp)->str;
-            tmps1 = expander(tmps, env);
-            if(tmps1)
-               *join = ft_strjoin(*join, tmps1);
-        }
-        else if ((*tmp)->str[1] == '\0' && t && (*tmp)->next->type != double_quo)
-            *join = ft_strjoin(*join, (*tmp)->str);
-         else if ((*tmp)->str[1] == '0')
-         *join = ft_strjoin(*join, "minishell");
-   }
+      ft_handler_dollar(tmp,cmd,env,join);
    else if ((*tmp)->type == redirect_in || (*tmp)->type == redirect_out)
       ft_lstadd_back1(&cmd->redirect, fill_riderect((*tmp)->str, tmp, env));
    else if (((*tmp)->type == white_space || (*tmp)->type == char_null || (*tmp)->type == tab) && *join)

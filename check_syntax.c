@@ -50,7 +50,7 @@ int check_pipe(char *str, int j, t_list** head, t_list *n)
         next = current->next; 
         current = next;
     }
-    if (!j || current->type == pipe_token || n->type == pipe_token)
+    if (!j || current->type == pipe_token || n->type == pipe_token ||( n->next && n->next->type == pipe_token))
         return (0);
     while (str[i])
     {
