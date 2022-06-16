@@ -120,6 +120,7 @@ int skip_redirect(char *str)
       i++;
    return (i);
 }
+
 char *check(char *str, char **env, t_list **tmp, int *test)
 {
    char *new;
@@ -161,7 +162,7 @@ t_redirection *fill_riderect(char *str, t_list **tmp, char **env)
    test = 0;
    i = skip_redirect(str);
    new = (t_redirection *)malloc(sizeof(t_redirection));
-   new->file = check(str + i,env, tmp, &test);
+   new->file = check(str + i, env, tmp, &test);
    if(!test)
       new->file = ft_strdup(str + i);
    if(str[0] == '<' && str[1] == '<')
@@ -191,6 +192,7 @@ int count_commads(t_list **head)
    }
    return (c);
 }
+
 t_list *ft_count_args(t_list *current, int *count)
 {
    *count = 0;
@@ -213,11 +215,9 @@ t_list *ft_count_args(t_list *current, int *count)
 int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
 {
    char *tmps1, *tmps;
+   int t = 0;
 
-   if((*tmp)->type != redirect_in && (*tmp)->type != redirect_out && 
-      (*tmp)->type != double_quo && (*tmp)->type != dollar 
-      && (*tmp)->type != single_quo 
-      && (*tmp)->type != white_space && (*tmp)->type != char_null)
+   if((*tmp)->type == -1)
       *join = ft_strjoin(*join, (*tmp)->str);
    else if ((*tmp)->type == single_quo)
       *join = ft_strjoin(*join, remove_single_quote((*tmp)->str));
@@ -225,19 +225,21 @@ int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
       *join = ft_strjoin(*join, remove_double_quote((*tmp)->str, env));
    else if ((*tmp)->type == dollar)
    {
-         if((*tmp)->str && (*tmp)->str[1] != '\0')
+      if((*tmp)->next)
+         t = 1;
+         if((*tmp)->str && (*tmp)->str[1] != '\0' && t && (*tmp)->next->type == double_quo)
          {
             tmps = (*tmp)->str;
             tmps1 = expander(tmps, env);
             if(tmps1)
                *join = ft_strjoin(*join, tmps1);
         }
-        else if ((*tmp)->str[1] == '\0')
+        else if ((*tmp)->str[1] == '\0' && t && (*tmp)->next->type != double_quo)
             *join = ft_strjoin(*join, (*tmp)->str);
    }
-   else if ((*tmp)->type != white_space && (*tmp)->type != char_null)
+   else if ((*tmp)->type == redirect_in || (*tmp)->type == redirect_out)
       ft_lstadd_back1(&cmd->redirect, fill_riderect((*tmp)->str, tmp, env));
-   else if (((*tmp)->type == white_space || (*tmp)->type == char_null) && *join)
+   else if (((*tmp)->type == white_space || (*tmp)->type == char_null || (*tmp)->type == tab) && *join)
    {
       cmd->envp[(*j)++] = *join;
       *join = NULL;
@@ -264,8 +266,9 @@ void fill_cmd(t_command *cmd, char **env, int nbr_args, t_list *tmp)
             join = NULL;
       }
       else
-      {
-            join = NULL;
+      {  
+         cmd->envp[j++] = join;
+         join = NULL;
          break ;
       }
       tmp = tmp->next;
@@ -317,7 +320,10 @@ void ft_parser(t_list** head, char *line , char **env)
       tmp = current;
       current = ft_count_args(current,&nbr_args);
       if (nbr_args)
+      {
+         cmd[i].num_of_args = nbr_args;
          fill_cmd(cmd + i, env, nbr_args, tmp);
+      }
    i++;
    }
    affich(nbr_cmds,cmd);

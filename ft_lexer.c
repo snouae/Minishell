@@ -133,7 +133,16 @@ void ft_mark(char *line, int *i, int type, t_list **head)
     else
         ft_lstadd_back(head, ft_add("\0", 0, 1, type));
 }
-
+void affich_token(t_list **head)
+{
+    t_list *tmp;
+    tmp = *head;
+    while(tmp != NULL)
+    {
+        printf("the list : %s -------> type : %d \n", tmp->str, tmp->type);
+        tmp = tmp->next;
+    }
+}
 void ft_lexer(char *line , char **env)
 {
     int i;
@@ -159,20 +168,14 @@ void ft_lexer(char *line , char **env)
             ft_mark_dollar(line, &i, dollar, &head);
          else if (search_token(line[i]) == single_quo)
             ft_mark_quote(line,&i,single_quo,&head);
-         else if (search_token(line[i]) == char_null)
-            ft_mark(line, &i, char_null ,&head);
+         else if (search_token(line[i]) == tab)
+            ft_mark(line, &i, tab, &head);
          else if (search_token(line[i]) == white_space)
             ft_mark(line, &i, white_space ,&head);
         i++;
     }
     ft_mark(line, &i, char_null ,&head);
-    t_list *tmp;
-    tmp = head;
-    while(tmp != NULL)
-    {
-        printf("the list : %s -------> type : %d \n", tmp->str, tmp->type);
-        tmp = tmp->next;
-    }
+    affich_token(&head);
     ft_check(&head,line);
     ft_parser(&head,line,env);
 }
