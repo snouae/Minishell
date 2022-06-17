@@ -65,11 +65,11 @@ typedef struct s_command
     //char    *executable;
 }		t_command;
 
-void ft_lexer(char *line, char **env);
+t_list *ft_lexer(char *line , char **env);
 t_list	*ft_add(char *line, int start, int end, int type);
 int search_token(char token);
 int	ft_strlen(char *s);
-void ft_check(t_list** head, char *line);
+int ft_check(t_list** head, char *line);
 void ft_parser(t_list** head, char *line, char **env);
 char	**ft_split(char const *s, char c);
 int	ft_strcmp(char *s1, char *s2);

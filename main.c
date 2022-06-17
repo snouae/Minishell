@@ -52,6 +52,7 @@ int line_empty(char *str)
 int main(int ac, char **av, char **env)
 {
 	int i;
+	t_list *head;
 
 	i = 0;
 	(void)ac;
@@ -77,9 +78,13 @@ int main(int ac, char **av, char **env)
 		if (ft_strlen(buffer))
 		{
 			add_history (buffer);
-			//printf("%s\n",buffer);
-			ft_lexer(buffer,env);
-		
+			head = ft_lexer(buffer,env);
+			if(!ft_check(&head,buffer))
+			{
+				printf("minishell: syntax error\n");
+				continue ;
+			}
+			ft_parser(&head,buffer,env);
 		}
 
 		free(buffer);

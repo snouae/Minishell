@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-#include "minishell.h"
 
 void	ft_lstadd_back1(t_redirection **lst, t_redirection *new)
 {
@@ -218,8 +217,7 @@ void ft_handler_dollar(t_list **tmp, t_command *cmd, char **env, char **join)
 
    if((*tmp)->next)
       t = 1;
-   if((*tmp)->str && (*tmp)->str[1] != '\0' && (*tmp)->str[1] != '0' 
-   || (t && (*tmp)->next->type == double_quo))
+   if(((*tmp)->str && (*tmp)->str[1] != '\0' && (*tmp)->str[1] != '0') || (t && (*tmp)->next->type == double_quo))
    {
       tmps = (*tmp)->str;
       tmps1 = expander(tmps, env);

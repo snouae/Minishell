@@ -50,7 +50,7 @@ int check_pipe(char *str, int j, t_list** head, t_list *n)
         next = current->next; 
         current = next;
     }
-    if (!j || current->type == pipe_token || n->type == pipe_token ||( n->next && n->next->type == pipe_token))
+    if (!j || current->type == pipe_token || n->type == pipe_token ||( n->next && n->type == white_space && n->next->type == pipe_token))
         return (0);
     while (str[i])
     {
@@ -63,39 +63,55 @@ int check_pipe(char *str, int j, t_list** head, t_list *n)
     return (1);
 }
 
-void ft_check(t_list** head, char *line)
+int check_red(char *str)
 {
-   t_list *current = *head;
-   t_list *next, *tmp;
+    int i;
+    int c;
+
+    i = 0;
+    c = 0;
+
+     while (str[i])
+    {
+        if (str[i] == redirect_in || str[i] == redirect_out)
+            c++;
+    i++;
+    }
+    if (c > 2 || ft_strlen(str) == c)
+        return (0);
+    return (1);
+}
+
+int ft_check(t_list** head, char *line)
+{
+   t_list *current;
+
+   current = *head;
    int c = 0;
     while (current != NULL) 
    {
-       if (current->type == double_quo)
-       {
+        if (current->type == double_quo)
+        {
            if (!check_double_quote(current->str))
-                {
-                    printf("Minishell: syntax error");
-                    exit (1);
-                }
-       }
+                return (0);
+        }
         else if (current->type == single_quo)
-       {
+        {
            if (!check_quote(current->str))
-                {
-                    printf("Minishell: syntax error");
-                    exit (1);
-                }
-       }
+                return (0);
+        }
         else if (current->type == pipe_token)
-       {
+        {
            if (!check_pipe(current->str, c, head, current->next))
-                {
-                    printf("Minishell: syntax error");
-                    exit (1);
-                }
-       }
-        next = current->next; 
-        current = next;
+                return (0);
+        }
+        else if ((current->type == redirect_in) || (current->type == redirect_out))
+        {
+           if (!check_red(current->str))
+                return (0);
+        }
+        current = current->next; 
         c++;
    }
+   return (1);
 }

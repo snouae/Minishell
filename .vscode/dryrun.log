@@ -6,6 +6,7 @@ gcc  -c ft_lexer.c -o ft_lexer.o -I minishell.h -I /goinfre/snouae/.brew/opt/rea
 gcc  -c check_syntax.c -o check_syntax.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c parser.c -o parser.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c check_command.c -o check_command.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+ 
 gcc  -c ft_split.c -o ft_split.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c expander.c -o expander.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c ft_riderct.c -o ft_riderct.o -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include

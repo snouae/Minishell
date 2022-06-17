@@ -148,7 +148,7 @@ void affich_token(t_list **head)
         tmp = tmp->next;
     }
 }
-void ft_lexer(char *line , char **env)
+t_list *ft_lexer(char *line , char **env)
 {
     int i;
     t_list *head;
@@ -180,9 +180,10 @@ void ft_lexer(char *line , char **env)
         i++;
     }
     ft_mark(line, &i, char_null ,&head);
-    affich_token(&head);
-    ft_check(&head,line);
-    ft_parser(&head,line,env);
+    //affich_token(&head);
+    return (head);
+    //ft_check(&head,line);
+    //ft_parser(&head,line,env);
 }
 //<<END <$HOMEinfile grep -v 42 | >> outfile1 wc -l > outfile2 | ls | >outfile3 | echo "don't | split"
 /*
