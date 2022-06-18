@@ -53,16 +53,15 @@ typedef struct s_redirection
     char *file;
     int type;
     int fd;
-    //int tartib;
     struct s_redirection* next;
 } t_redirection;
 
 typedef struct s_command
 {
-	char	**envp; //cmd
+	char	**args; //cmd
+    int     num_cmd; 
     int     num_of_args;
     struct s_redirection *redirect;
-    //char    *executable;
 }		t_command;
 
 t_list *ft_lexer(char *line , char **env);
@@ -70,7 +69,7 @@ t_list	*ft_add(char *line, int start, int end, int type);
 int search_token(char token);
 int	ft_strlen(char *s);
 int ft_check(t_list** head, char *line);
-void ft_parser(t_list** head, char *line, char **env);
+t_command *ft_parser(t_list** head, char *line , char **env);
 char	**ft_split(char const *s, char c);
 int	ft_strcmp(char *s1, char *s2);
 char	*ft_strdup(char *src);
@@ -84,5 +83,7 @@ char *fill_array(char *line, int start, int end);
 int search_token(char token);
 void open_files(t_command *cmd, int leng);
 int cherche_symbol(char c, char *str);
+void deleteList(t_list** head_ref);
+void free_all(t_command *cmd);
 
 #endif

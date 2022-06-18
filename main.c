@@ -52,14 +52,17 @@ int line_empty(char *str)
 int main(int ac, char **av, char **env)
 {
 	int i;
+	int test;
 	t_list *head;
+	t_command *cmd;
 
 	i = 0;
+	cmd = NULL;
 	(void)ac;
 	(void)av;
 	while(1)
 	{
-		
+		test = 0;
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handler);
 		char *buffer = readline("Minishell> ");
@@ -82,12 +85,19 @@ int main(int ac, char **av, char **env)
 			if(!ft_check(&head,buffer))
 			{
 				printf("minishell: syntax error\n");
+				free(buffer);
+				deleteList(&head);
+				test = 1;
 				continue ;
 			}
-			ft_parser(&head,buffer,env);
+			cmd = ft_parser(&head,buffer,env);
 		}
-
+			//puts("here");
+		if(!test)
+			deleteList(&head);
+		// 	//puts("here1");
 		free(buffer);
+		free_all(cmd);
     }
     return 0;
 }

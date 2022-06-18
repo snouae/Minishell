@@ -28,12 +28,14 @@ int search_token(char token)
 
 void deleteList(t_list** head_ref)
 {
-   t_list *current = *head_ref;
+   t_list *current;
    t_list *next;
   
+   current = *head_ref;
    while (current) 
    {
        next = current->next;
+       free(current->str);
        free(current);
        current = next;
    }
@@ -180,7 +182,7 @@ t_list *ft_lexer(char *line , char **env)
         i++;
     }
     ft_mark(line, &i, char_null ,&head);
-    //affich_token(&head);
+    affich_token(&head);
     return (head);
     //ft_check(&head,line);
     //ft_parser(&head,line,env);

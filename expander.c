@@ -62,7 +62,11 @@ char *expander(char *var, char **envp)
     if(envp[i] && ft_strnstr(envp[i], var + 1, ft_strlen(var)))
     {
         content = envp[i] + ft_strlen(var + 1);
+        free(var);
+        var = NULL;
         return (content);
     }
+    free(var);
+    var = NULL;
     return (NULL);
 }

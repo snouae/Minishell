@@ -46,6 +46,7 @@ char *check_dollar(int *j, char *str, char *new, char **env)
 {
    int start;
    char *dlr;
+   char *expndr;
 
    start = *j;
    (*j)++;
@@ -55,8 +56,9 @@ char *check_dollar(int *j, char *str, char *new, char **env)
       (*j)++;
    (*j)--;
    dlr = fill_array(str,start,*j);
-   dlr = expander(dlr,env);
-   new = ft_strjoin(new,dlr);
+   expndr = expander(dlr,env);
+   new = ft_strjoin(new,expndr);
+
    return (new);
 }
 char *remove_double_quote(char *str, char **env)
@@ -84,6 +86,7 @@ char *remove_double_quote(char *str, char **env)
       }
       j++;
    }
+   free(tmp);
    return (new);
 }
 
@@ -105,6 +108,7 @@ char *remove_single_quote(char *str)
       new = ft_strjoin(new,tmp);
       i++;
    }
+   free(tmp);
    return (new);
 }
 
@@ -129,21 +133,21 @@ char *check(char *str, char **env, t_list **tmp, int *test)
    {
       if((*tmp)->next->str[0] == dollar)
       {
-         (*tmp)->next->str = expander((*tmp)->next->str, env);
+         (*tmp)->next->str = ft_strdup(expander((*tmp)->next->str, env));
          new = ft_strjoin(ft_strdup(str), (*tmp)->next->str);
          (*tmp) = (*tmp)->next;
          *test = 1;
       }
       else if ((*tmp)->next->str[0] == double_quo)
       {    
-         (*tmp)->next->str = remove_double_quote((*tmp)->next->str, env);
+         (*tmp)->next->str = ft_strdup(remove_double_quote((*tmp)->next->str, env));
          new = ft_strjoin(ft_strdup(str),(*tmp)->next->str);
          (*tmp) = (*tmp)->next;
          *test = 1;
       }
       else if ((*tmp)->next->str[0] == single_quo)
       {
-         (*tmp)->next->str = remove_single_quote((*tmp)->next->str);
+         (*tmp)->next->str = ft_strdup(remove_single_quote((*tmp)->next->str));
          new = ft_strjoin(ft_strdup(str), (*tmp)->next->str);
          (*tmp) = (*tmp)->next;
          *test = 1;
@@ -210,17 +214,19 @@ t_list *ft_count_args(t_list *current, int *count)
     }
     return (current);
 }
+
 void ft_handler_dollar(t_list **tmp, t_command *cmd, char **env, char **join)
 {
    char *tmps1, *tmps;
-   int t = 0;
 
+   tmps1 = NULL;
+   int t = 0;
    if((*tmp)->next)
       t = 1;
    if(((*tmp)->str && (*tmp)->str[1] != '\0' && (*tmp)->str[1] != '0') || (t && (*tmp)->next->type == double_quo))
    {
       tmps = (*tmp)->str;
-      tmps1 = expander(tmps, env);
+      tmps1 = expander(ft_strdup(tmps), env);
       if(tmps1)
          *join = ft_strjoin(*join, tmps1);
    }
@@ -232,19 +238,28 @@ void ft_handler_dollar(t_list **tmp, t_command *cmd, char **env, char **join)
 
 int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
 {
+   char *quote;
    if((*tmp)->type == -1)
       *join = ft_strjoin(*join, (*tmp)->str);
    else if ((*tmp)->type == single_quo)
-      *join = ft_strjoin(*join, remove_single_quote((*tmp)->str));
+   {
+      quote = remove_single_quote((*tmp)->str);
+      *join = ft_strjoin(*join, quote);
+      free (quote);
+   }
    else if ((*tmp)->type == double_quo)
-      *join = ft_strjoin(*join, remove_double_quote((*tmp)->str, env));
+   {
+      quote = remove_double_quote((*tmp)->str, env);
+      *join = ft_strjoin(*join, quote);
+      free (quote);
+   }
    else if ((*tmp)->type == dollar)
       ft_handler_dollar(tmp,cmd,env,join);
    else if ((*tmp)->type == redirect_in || (*tmp)->type == redirect_out)
       ft_lstadd_back1(&cmd->redirect, fill_riderect((*tmp)->str, tmp, env));
    else if (((*tmp)->type == white_space || (*tmp)->type == char_null || (*tmp)->type == tab) && *join)
    {
-      cmd->envp[(*j)++] = *join;
+      cmd->args[(*j)++] = *join;
       *join = NULL;
       return (1);
    }
@@ -259,24 +274,28 @@ void fill_cmd(t_command *cmd, char **env, int nbr_args, t_list *tmp)
 
    j = 0;
    join = NULL;
-   cmd->envp = (char **)malloc(sizeof(char *) * (nbr_args + 1));
+   cmd->args = (char **)malloc(sizeof(char *) * (nbr_args + 1));
    cmd->redirect = NULL;
    while (tmp != NULL)
    {
       if (tmp->type != 124)
       {
          if(fill_arg(&tmp, cmd , &j, env, &join))
+         {
+            free(join);
             join = NULL;
+         }
       }
       else
       {  
-         cmd->envp[j++] = join;
+         cmd->args[j++] = join;
+         free(join);
          join = NULL;
          break ;
       }
       tmp = tmp->next;
    }
-   cmd->envp[j] = 0;
+   cmd->args[j] = 0;
 }
 
 void affich(int nbr_cmds, t_command *cmd)
@@ -288,9 +307,9 @@ void affich(int nbr_cmds, t_command *cmd)
    {
       j = 0;
       printf("\nthe caommande number %d\n",i + 1);
-      while(cmd[i].envp[j])
+      while(cmd[i].args[j])
       {
-         printf("%s ",cmd[i].envp[j]);
+         printf("%s ",cmd[i].args[j]);
          j++;
       }
       head1 = cmd[i].redirect;
@@ -303,8 +322,46 @@ void affich(int nbr_cmds, t_command *cmd)
       i++;
    }
 }
+void deleteredir(t_redirection **head_ref)
+{
+   t_redirection *current;
+   t_redirection *next;
+  
+   current = *head_ref;
+   while (current) 
+   {
+       next = current->next;
+       free(current->file);
+       free(current);
+       current = next;
+   }
+   *head_ref = NULL;
+}
+void free_all(t_command *cmd)
+{
+   int i;
+   int j;
+   t_command *ptr;
 
-void ft_parser(t_list** head, char *line , char **env)
+   i = 0;
+   while(i < cmd[0].num_cmd)
+   {
+      j = 0;
+      while(cmd[i].args[j])
+      {
+         free(cmd[i].args[j]);
+         j++;
+      }
+      if(cmd[i].redirect)
+         deleteredir(&cmd[i].redirect);
+      free(cmd[i].args);
+      //ptr = cmd + i;
+      //puts("here");
+      //free(ptr);
+      i++;
+   }
+}
+t_command *ft_parser(t_list** head, char *line , char **env)
 {
    t_list *current;
    t_list *tmp;
@@ -318,6 +375,7 @@ void ft_parser(t_list** head, char *line , char **env)
    current = *head;
    nbr_cmds = count_commads(head);
    cmd = (t_command *)malloc(sizeof(t_command) * count_commads(head));
+   cmd[0].num_cmd = nbr_cmds;
    while (i < nbr_cmds)
    {
       tmp = current;
@@ -330,4 +388,5 @@ void ft_parser(t_list** head, char *line , char **env)
    i++;
    }
    affich(nbr_cmds,cmd);
+   return (cmd);
 }

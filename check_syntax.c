@@ -50,7 +50,8 @@ int check_pipe(char *str, int j, t_list** head, t_list *n)
         next = current->next; 
         current = next;
     }
-    if (!j || current->type == pipe_token || n->type == pipe_token ||( n->next && n->type == white_space && n->next->type == pipe_token))
+    if (!j || current->type == pipe_token || n->type == pipe_token 
+    ||( n->next && n->type == white_space && n->next->type == pipe_token))
         return (0);
     while (str[i])
     {
@@ -63,21 +64,27 @@ int check_pipe(char *str, int j, t_list** head, t_list *n)
     return (1);
 }
 
-int check_red(char *str)
+int check_red(char *str, t_list *nx)
 {
     int i;
     int c;
+    int w;
 
     i = 0;
     c = 0;
+    w = 0;
 
-     while (str[i])
-    {
-        if (str[i] == redirect_in || str[i] == redirect_out)
-            c++;
-    i++;
-    }
-    if (c > 2 || ft_strlen(str) == c)
+     while (((str[i] == redirect_in || str[i] == redirect_out)))
+     {
+         c++;
+         i++;
+     }
+    while (str[i] && cherche_symbol(str[i], " \t\n\v\f\r"))
+        i++;
+    if ((str[i] == '\0' && nx && (nx->type != dollar 
+    && nx->type != double_quo && nx->type != single_quo)) || c > 2 
+    || (ft_strlen(str) == c && nx && (nx->type != dollar 
+    && nx->type != double_quo && nx->type != single_quo)))
         return (0);
     return (1);
 }
@@ -107,7 +114,7 @@ int ft_check(t_list** head, char *line)
         }
         else if ((current->type == redirect_in) || (current->type == redirect_out))
         {
-           if (!check_red(current->str))
+           if (!check_red(current->str, current->next))
                 return (0);
         }
         current = current->next; 
