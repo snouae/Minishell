@@ -72,17 +72,17 @@ int line_empty(char *str)
 }
 int main(int ac, char **av, char **envp)
 {
-	int i;
 	int test;
 	t_list *head;
+	char *buffer;
 	t_command *cmd;
 
-	i = 0;
+
 	cmd = NULL;
 	(void)ac;
 	(void)av;
 	g_env = copy_env(envp);
-    if (!g_env[i])
+    if (!g_env)
     {
         ft_free_env(&g_env);
         return (ft_error("minishell", NULL, strerror(ENOMEM)));
@@ -92,14 +92,18 @@ int main(int ac, char **av, char **envp)
 		test = 0;
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handler);
-		char *buffer = readline("Minishell> ");
-		if (!buffer)
-			return (write(2, "exit\n", 5), 0);
-		if (line_empty(buffer))
-		{
-			free(buffer);
-			continue;
-		}
+		//rl_on_new_line();
+		//pause();
+		buffer = readline("\033[1mminishell-2.0$> \033[m");
+		 if (!buffer)
+		 {
+			 break;
+		 }
+		// if (line_empty(buffer))
+		// {
+		// 	free(buffer);
+		// 	continue;
+		// }
 		// if (!ft_strcmp(buffer, "exit"))
 		// {
 		// 	free (buffer);
@@ -117,9 +121,9 @@ int main(int ac, char **av, char **envp)
 				test = 1;
 				continue ;
 			}
+			signal(SIGQUIT, SIG_IGN);
 			cmd = ft_parser(&head,buffer,envp);
-			if (cmd != NULL)
-				g_env = execute_root(cmd, envp, i);
+			//execute_root(cmd, g_env);
 		}
 		// if(!test)
 		// 	deleteList(&head);

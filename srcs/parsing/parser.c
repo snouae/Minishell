@@ -387,6 +387,6 @@ t_command *ft_parser(t_list** head, char *line , char **env)
       }
    i++;
    }
-   affich(nbr_cmds,cmd);
+   //affich(nbr_cmds,cmd);
    return (cmd);
 }

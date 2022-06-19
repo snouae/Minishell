@@ -1,7 +1,6 @@
-make --dry-run --keep-going --print-directory
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/snouae/Desktop/Minishell'
 gcc  -c srcs/parsing/main.c -o srcs/parsing/main.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
- 
 gcc  -c srcs/parsing/tools.c -o srcs/parsing/tools.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/parsing/ft_lexer.c -o srcs/parsing/ft_lexer.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/parsing/check_syntax.c -o srcs/parsing/check_syntax.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
@@ -15,7 +14,6 @@ gcc  -c srcs/builtins/builtin_echo.c -o srcs/builtins/builtin_echo.o -I includes
 gcc  -c srcs/builtins/builtin_env.c -o srcs/builtins/builtin_env.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/builtins/builtin_exit.c -o srcs/builtins/builtin_exit.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/builtins/builtin_export.c -o srcs/builtins/builtin_export.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
- 
 gcc  -c srcs/builtins/builtin_pwd.c -o srcs/builtins/builtin_pwd.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/builtins/builtin_root.c -o srcs/builtins/builtin_root.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/builtins/builtin_unset.c -o srcs/builtins/builtin_unset.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include

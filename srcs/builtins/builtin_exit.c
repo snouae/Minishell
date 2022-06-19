@@ -112,9 +112,13 @@ int builtin_exit(int argc, char **argv)
     g_status = 0;
     status_error = 0;
     i = 1;
-    // if (argc == 1)
-    //     ft_putstr_fd("exit\n", STDERR_FILENO);
-    check_numeric(argv[1]);
+    if (argc == 1)
+    {
+        ft_putstr_fd("exit\n", STDERR_FILENO);
+        exit (0);
+    }
+    if (argv[1] != NULL)
+        check_numeric(argv[1]);
     while (argv[i])
         i++;
     if (i > 2)
@@ -130,6 +134,7 @@ int builtin_exit(int argc, char **argv)
         g_status = rtn_atoi % 256;
     }
     printf("%d\n", g_status);
-    // ft_putstr_fd("exit\n", STDERR_FILENO);
+    ft_putstr_fd("exit\n", STDERR_FILENO);
+    exit(g_status);
     return (0);
 }

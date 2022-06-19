@@ -56,7 +56,7 @@ char    **exec_1(t_command *data, int index, char **envp)
     return (envp);
 }
 
-char    **execute_root(t_command *data, char **envp, int index) //, t_list *list need it later
+void execute_root(t_command *data, char **envp) //, t_list *list need it later
 {
     // int status;
     int i;
@@ -69,18 +69,22 @@ char    **execute_root(t_command *data, char **envp, int index) //, t_list *list
     pid = -1;
     while(i < data[i].num_cmds)
     {
-        pid  = ft_pipe_built(data, pid, i);
-        printf("the pid is %d\n",pid);
-    puts("heeeeeere");
-        // if (pid == 0 || (data[i].is_builtin_in != 0 && data[i].fork == 0))
-        // {
-        envp = exec_1(data, i, envp);
-        return (envp);
-        // else
-        // {
-        close(data[i].pipe_fd[0]);
-        close(data[i].pipe_fd[1]);
-        // }
+       // if (i > 0)
+            pid  = ft_pipe_built(data, pid, i);
+    //printf("the pid is %d\n",pid);
+   // puts("heeeeeere");
+        if (pid == 0 || (data[i].is_builtin_in != 0 && data[i].fork == 0))
+        {
+            //puts("here1");
+            envp = exec_1(data, i, envp);
+            return ;
+            //return (envp);
+        }
+        else
+        {
+            close(data[i].pipe_fd[0]);
+            close(data[i].pipe_fd[1]);
+        }
         i++;
     }
     // while (--j)
@@ -89,14 +93,14 @@ char    **execute_root(t_command *data, char **envp, int index) //, t_list *list
 	// 	if (WIFEXITED(status))
 	// 		g_exit_value = WEXITSTATUS(status);
     // }
-    return (envp);
+   //return (envp);
 }
 
 int ft_pipe_built(t_command *data, int pid, int index)
 {
     data[index].is_builtin_in = builtin_check(data[index].cmd[0]);
-    printf("the nbr %d\n",data[index].is_builtin_in);
-    if (data[index].num_cmds > 1)
+    //printf("the nbr %d\n",data[index].is_builtin_in);
+    if (data[index].num_cmds > 1 && index > 0)
         pipe(data[index].pipe_fd);
     if (data[index].is_builtin_in == 0 && data[index].num_cmds > 1)
     {

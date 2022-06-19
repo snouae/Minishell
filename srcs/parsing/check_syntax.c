@@ -45,14 +45,14 @@ int check_pipe(char *str, int j, t_list** head, t_list *n)
 
     c = 0;
     i = 0;
-    while (current->next != NULL)
-    {
-        next = current->next; 
-        current = next;
-    }
-    if (!j || current->type == pipe_token || n->type == pipe_token 
-    ||( n->next && n->type == white_space && n->next->type == pipe_token))
-        return (0);
+    // while (current->type != 0)
+    // {
+    //     next = current->next; 
+    //     current = next;
+    // }
+    // if (!j ||  current->type == pipe_token || n->type == pipe_token 
+    // ||( n->next && n->type == white_space && n->next->type == pipe_token))
+    //     return (0);
     while (str[i])
     {
         if (str[i] == pipe_token)

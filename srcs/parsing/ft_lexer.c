@@ -182,7 +182,7 @@ t_list *ft_lexer(char *line , char **env)
         i++;
     }
     ft_mark(line, &i, char_null ,&head);
-    affich_token(&head);
+   // affich_token(&head);
     return (head);
     //ft_check(&head,line);
     //ft_parser(&head,line,env);

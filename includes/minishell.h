@@ -135,7 +135,7 @@ void    ft_command_not_found(char **paths, char *cmd);
 int     open_file(t_redirection *redirect);
 
 //====== execute function =====//
-char    **execute_root(t_command *data, char **envp, int index);
+void execute_root(t_command *data, char **envp);
 char    **execute_command(t_command *data, char **envp, int index);
 char    **exec_1(t_command *data, int index, char **envp);
 int     ft_pipe_built(t_command *data, int pid, int index);
