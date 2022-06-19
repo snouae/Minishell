@@ -93,6 +93,7 @@ char	**ft_split(char const *s, char c)
 		return (0);
 	return (ft_rem(s, tab, c, i));
 }
+
 /*#include <stdio.h>
 int main()
 {

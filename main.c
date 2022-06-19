@@ -92,12 +92,10 @@ int main(int ac, char **av, char **env)
 			}
 			cmd = ft_parser(&head,buffer,env);
 		}
-			//puts("here");
 		if(!test)
 			deleteList(&head);
-		// 	//puts("here1");
-		free(buffer);
 		free_all(cmd);
+		free(buffer);
     }
     return 0;
 }

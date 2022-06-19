@@ -58,7 +58,6 @@ char *check_dollar(int *j, char *str, char *new, char **env)
    dlr = fill_array(str,start,*j);
    expndr = expander(dlr,env);
    new = ft_strjoin(new,expndr);
-
    return (new);
 }
 char *remove_double_quote(char *str, char **env)
@@ -87,6 +86,7 @@ char *remove_double_quote(char *str, char **env)
       j++;
    }
    free(tmp);
+   free(str);
    return (new);
 }
 
@@ -109,6 +109,7 @@ char *remove_single_quote(char *str)
       i++;
    }
    free(tmp);
+   free(str);
    return (new);
 }
 
@@ -119,7 +120,7 @@ int skip_redirect(char *str)
    i = 1;
    if(str[i] == '>' || str[i] == '<')
       i = 2;
-   while(str[i] == tab || str[i] ==  ' ')
+   while(cherche_symbol(str[i], " \t\n\v\f\r"))
       i++;
    return (i);
 }
@@ -140,14 +141,14 @@ char *check(char *str, char **env, t_list **tmp, int *test)
       }
       else if ((*tmp)->next->str[0] == double_quo)
       {    
-         (*tmp)->next->str = ft_strdup(remove_double_quote((*tmp)->next->str, env));
+         (*tmp)->next->str = remove_double_quote((*tmp)->next->str, env);
          new = ft_strjoin(ft_strdup(str),(*tmp)->next->str);
          (*tmp) = (*tmp)->next;
          *test = 1;
       }
       else if ((*tmp)->next->str[0] == single_quo)
       {
-         (*tmp)->next->str = ft_strdup(remove_single_quote((*tmp)->next->str));
+         (*tmp)->next->str = remove_single_quote((*tmp)->next->str);
          new = ft_strjoin(ft_strdup(str), (*tmp)->next->str);
          (*tmp) = (*tmp)->next;
          *test = 1;
@@ -238,20 +239,17 @@ void ft_handler_dollar(t_list **tmp, t_command *cmd, char **env, char **join)
 
 int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
 {
-   char *quote;
    if((*tmp)->type == -1)
       *join = ft_strjoin(*join, (*tmp)->str);
    else if ((*tmp)->type == single_quo)
    {
-      quote = remove_single_quote((*tmp)->str);
-      *join = ft_strjoin(*join, quote);
-      free (quote);
+      (*tmp)->str = remove_single_quote((*tmp)->str);
+      *join = ft_strjoin(*join, (*tmp)->str);
    }
    else if ((*tmp)->type == double_quo)
    {
-      quote = remove_double_quote((*tmp)->str, env);
-      *join = ft_strjoin(*join, quote);
-      free (quote);
+      (*tmp)->str = remove_double_quote((*tmp)->str, env);
+      *join = ft_strjoin(*join, (*tmp)->str);
    }
    else if ((*tmp)->type == dollar)
       ft_handler_dollar(tmp,cmd,env,join);
@@ -259,7 +257,7 @@ int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
       ft_lstadd_back1(&cmd->redirect, fill_riderect((*tmp)->str, tmp, env));
    else if (((*tmp)->type == white_space || (*tmp)->type == char_null || (*tmp)->type == tab) && *join)
    {
-      cmd->args[(*j)++] = *join;
+      cmd->cmd[(*j)++] = *join;
       *join = NULL;
       return (1);
    }
@@ -274,7 +272,7 @@ void fill_cmd(t_command *cmd, char **env, int nbr_args, t_list *tmp)
 
    j = 0;
    join = NULL;
-   cmd->args = (char **)malloc(sizeof(char *) * (nbr_args + 1));
+   cmd->cmd = (char **)malloc(sizeof(char *) * (nbr_args + 1));
    cmd->redirect = NULL;
    while (tmp != NULL)
    {
@@ -288,14 +286,14 @@ void fill_cmd(t_command *cmd, char **env, int nbr_args, t_list *tmp)
       }
       else
       {  
-         cmd->args[j++] = join;
+         cmd->cmd[j++] = join;
          free(join);
          join = NULL;
          break ;
       }
       tmp = tmp->next;
    }
-   cmd->args[j] = 0;
+   cmd->cmd[j] = 0;
 }
 
 void affich(int nbr_cmds, t_command *cmd)
@@ -307,9 +305,9 @@ void affich(int nbr_cmds, t_command *cmd)
    {
       j = 0;
       printf("\nthe caommande number %d\n",i + 1);
-      while(cmd[i].args[j])
+      while(cmd[i].cmd[j])
       {
-         printf("%s ",cmd[i].args[j]);
+         printf("%s ",cmd[i].cmd[j]);
          j++;
       }
       head1 = cmd[i].redirect;
@@ -322,6 +320,7 @@ void affich(int nbr_cmds, t_command *cmd)
       i++;
    }
 }
+
 void deleteredir(t_redirection **head_ref)
 {
    t_redirection *current;
@@ -337,30 +336,32 @@ void deleteredir(t_redirection **head_ref)
    }
    *head_ref = NULL;
 }
+
 void free_all(t_command *cmd)
 {
    int i;
    int j;
    t_command *ptr;
+   int nbr;
 
    i = 0;
-   while(i < cmd[0].num_cmd)
+   nbr = cmd[0].num_cmd;
+   while(i < nbr)
    {
       j = 0;
-      while(cmd[i].args[j])
+      while(cmd[i].cmd[j])
       {
-         free(cmd[i].args[j]);
+         free(cmd[i].cmd[j]);
          j++;
       }
       if(cmd[i].redirect)
          deleteredir(&cmd[i].redirect);
-      free(cmd[i].args);
-      //ptr = cmd + i;
-      //puts("here");
-      //free(ptr);
+      free(cmd[i].cmd);
       i++;
    }
+   free(cmd);
 }
+
 t_command *ft_parser(t_list** head, char *line , char **env)
 {
    t_list *current;

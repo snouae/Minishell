@@ -11,6 +11,8 @@
 #include <signal.h>
 #include <fcntl.h>
 
+# define MAX_BUF 200
+# define ERROR	-1
 enum tokens
 {
     pipe_token = '|',
@@ -24,13 +26,15 @@ enum tokens
     char_null = 0,
     new_lin = '\n'
 };
-// typedef struct s_token
-// {
-//     int len;
-//     //int type;
-//     char *str;
-// }   t_token;
 
+/*
+my global variables
+*/
+char	                **g_env;
+// pid_t				g_pid;
+// int					g_error;
+int						g_status;
+int                     g_exit_value;
 enum s_fileType
 {
     NONE,
@@ -58,9 +62,12 @@ typedef struct s_redirection
 
 typedef struct s_command
 {
-	char	**args; //cmd
-    int     num_cmd; 
+	char	**cmd; //cmd
+    int     num_cmd;
     int     num_of_args;
+    int     pipe_fd[2];
+    int     fork;
+    int     is_builtin_in;
     struct s_redirection *redirect;
 }		t_command;
 
@@ -85,5 +92,78 @@ void open_files(t_command *cmd, int leng);
 int cherche_symbol(char c, char *str);
 void deleteList(t_list** head_ref);
 void free_all(t_command *cmd);
+/////////////////
+// ===== builtin functions ====== //
+int    builtin_root(char **argv);
+int     builtin_cd(int argc, char **argv);
+int     builtin_echo(int argc __attribute((unused)), char **argv);
+int     builtin_env(int argc __attribute((unused)),
+    char **argv __attribute((unused)));
+int     builtin_exit(int argc, char **argv);
+int     builtin_export(int argc, char **argv);
+void    exported_vars(void);
+int     builtin_check(char  *str);
+int     builtin_pwd(int argc __attribute((unused)), 
+    char **argv __attribute((unused)));
+int     builtin_unset(int argc __attribute((unused)), char **argv);
+
+
+//======================================
+// ==== ENV ===== //
+int     env_init(char **env);
+bool    check_var_is_char(char c);
+char    *search_env(char *name);
+char    *get_value(char *name);
+bool    check_var_is_char(char c);
+
+// ==== ENV MODIFY ====//
+int unset_the_var(char  *name);
+int put_the_var(char *str);
+int set_the_env(char *name, char *value);
+
+//=======================================
+//======= Execute utils ===== //
+char    *get_path(char **envp,  t_command *data, int index);
+void    ft_command_not_found(char **paths, char *cmd);
+int     open_file(t_redirection *redirect);
+
+//====== execute function =====//
+char    **execute_root(t_command *data, char **envp, int index);
+char    **execute_command(t_command *data, char **envp, int index);
+char    **exec_1(t_command *data, int index, char **envp);
+int     ft_pipe_built(t_command *data, int pid, int index);
+
+//========================================
+// ===== builtin_utils ==== //
+int     replace_str_env(char ***env, char *old_str, char *new_str);
+int     env_count(char **env);
+int     add_to_env(char ***env, char *str);
+int     remove_from_env(char ***env, char *str);
+void	ft_free_env(char ***env);
+
+
+//=========================================
+// ======== libft ============ //
+void	freememory(char **mem);
+int	wordlen(char const *s, char c);
+int	ft_wordcount(char const *s, char c);
+char	**fill(char **split, char const *s, char c);
+char	**ft_split(char const *s, char c);
+
+int	    ft_isalnum(int c);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+void	ft_putchar_fd(char c, int fd);
+void	ft_putendl_fd(char *s, int fd);
+void	ft_putstr_fd(char *s, int fd);
+char	*ft_strchr(const char *s, int c);
+int     ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlen(const char *s);
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+
+//====== Error === //
+int ft_error(char *shell_name, char *s1, char *message);
 
 #endif
