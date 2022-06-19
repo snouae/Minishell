@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 char *fill_array(char *line, int start, int end)
 {
@@ -20,7 +20,7 @@ char *fill_array(char *line, int start, int end)
 	return (str);
 }
 
-char	*ft_strnstr(const char *str, const char *to_find, size_t n)
+static char	*ft_strnstr_n(const char *str, const char *to_find, size_t n)
 {
 	size_t	i;
 	size_t	j;
@@ -57,9 +57,9 @@ char *expander(char *var, char **envp)
         return (NULL);
     var[leng] = '=';
     var[leng + 1] = '\0';
-    while (envp[i] && !ft_strnstr(envp[i], var + 1, ft_strlen(var)))
+    while (envp[i] && !ft_strnstr_n(envp[i], var + 1, ft_strlen(var)))
         i++;
-    if(envp[i] && ft_strnstr(envp[i], var + 1, ft_strlen(var)))
+    if(envp[i] && ft_strnstr_n(envp[i], var + 1, ft_strlen(var)))
     {
         content = envp[i] + ft_strlen(var + 1);
         free(var);

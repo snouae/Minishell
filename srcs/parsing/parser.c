@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
+#include "../../includes/minishell.h"
 
 void	ft_lstadd_back1(t_redirection **lst, t_redirection *new)
 {
@@ -57,7 +56,7 @@ char *check_dollar(int *j, char *str, char *new, char **env)
    (*j)--;
    dlr = fill_array(str,start,*j);
    expndr = expander(dlr,env);
-   new = ft_strjoin(new,expndr);
+   new = ft_strjoin_n(new,expndr);
    return (new);
 }
 char *remove_double_quote(char *str, char **env)
@@ -81,7 +80,7 @@ char *remove_double_quote(char *str, char **env)
       else
       {
          tmp[0] = str[j];
-         new = ft_strjoin(new,tmp);
+         new = ft_strjoin_n(new,tmp);
       }
       j++;
    }
@@ -105,7 +104,7 @@ char *remove_single_quote(char *str)
    while (i < leng - 1)
    {
       tmp[0] = str[i];
-      new = ft_strjoin(new,tmp);
+      new = ft_strjoin_n(new,tmp);
       i++;
    }
    free(tmp);
@@ -134,22 +133,22 @@ char *check(char *str, char **env, t_list **tmp, int *test)
    {
       if((*tmp)->next->str[0] == dollar)
       {
-         (*tmp)->next->str = ft_strdup(expander((*tmp)->next->str, env));
-         new = ft_strjoin(ft_strdup(str), (*tmp)->next->str);
+         (*tmp)->next->str = ft_strdup_n(expander((*tmp)->next->str, env));
+         new = ft_strjoin_n(ft_strdup(str), (*tmp)->next->str);
          (*tmp) = (*tmp)->next;
          *test = 1;
       }
       else if ((*tmp)->next->str[0] == double_quo)
       {    
          (*tmp)->next->str = remove_double_quote((*tmp)->next->str, env);
-         new = ft_strjoin(ft_strdup(str),(*tmp)->next->str);
+         new = ft_strjoin_n(ft_strdup_n(str),(*tmp)->next->str);
          (*tmp) = (*tmp)->next;
          *test = 1;
       }
       else if ((*tmp)->next->str[0] == single_quo)
       {
          (*tmp)->next->str = remove_single_quote((*tmp)->next->str);
-         new = ft_strjoin(ft_strdup(str), (*tmp)->next->str);
+         new = ft_strjoin_n(ft_strdup_n(str), (*tmp)->next->str);
          (*tmp) = (*tmp)->next;
          *test = 1;
       }
@@ -168,7 +167,7 @@ t_redirection *fill_riderect(char *str, t_list **tmp, char **env)
    new = (t_redirection *)malloc(sizeof(t_redirection));
    new->file = check(str + i, env, tmp, &test);
    if(!test)
-      new->file = ft_strdup(str + i);
+      new->file = ft_strdup_n(str + i);
    if(str[0] == '<' && str[1] == '<')
       new->type = HEREDOC;
    else if(str[0] == '>' && str[1] == '>')
@@ -229,27 +228,27 @@ void ft_handler_dollar(t_list **tmp, t_command *cmd, char **env, char **join)
       tmps = (*tmp)->str;
       tmps1 = expander(ft_strdup(tmps), env);
       if(tmps1)
-         *join = ft_strjoin(*join, tmps1);
+         *join = ft_strjoin_n(*join, tmps1);
    }
    else if ((*tmp)->str[1] == '\0' && t && (*tmp)->next->type != double_quo)
-      *join = ft_strjoin(*join, (*tmp)->str);
+      *join = ft_strjoin_n(*join, (*tmp)->str);
    else if ((*tmp)->str[1] == '0')
-   *join = ft_strjoin(*join, "minishell");
+   *join = ft_strjoin_n(*join, "minishell");
 }
 
 int fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
 {
    if((*tmp)->type == -1)
-      *join = ft_strjoin(*join, (*tmp)->str);
+      *join = ft_strjoin_n(*join, (*tmp)->str);
    else if ((*tmp)->type == single_quo)
    {
       (*tmp)->str = remove_single_quote((*tmp)->str);
-      *join = ft_strjoin(*join, (*tmp)->str);
+      *join = ft_strjoin_n(*join, (*tmp)->str);
    }
    else if ((*tmp)->type == double_quo)
    {
       (*tmp)->str = remove_double_quote((*tmp)->str, env);
-      *join = ft_strjoin(*join, (*tmp)->str);
+      *join = ft_strjoin_n(*join, (*tmp)->str);
    }
    else if ((*tmp)->type == dollar)
       ft_handler_dollar(tmp,cmd,env,join);
@@ -345,7 +344,7 @@ void free_all(t_command *cmd)
    int nbr;
 
    i = 0;
-   nbr = cmd[0].num_cmd;
+   nbr = cmd[0].num_cmds;
    while(i < nbr)
    {
       j = 0;
@@ -376,9 +375,9 @@ t_command *ft_parser(t_list** head, char *line , char **env)
    current = *head;
    nbr_cmds = count_commads(head);
    cmd = (t_command *)malloc(sizeof(t_command) * count_commads(head));
-   cmd[0].num_cmd = nbr_cmds;
    while (i < nbr_cmds)
    {
+   cmd[i].num_cmds = nbr_cmds;
       tmp = current;
       current = ft_count_args(current,&nbr_args);
       if (nbr_args)

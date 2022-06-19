@@ -10,6 +10,8 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <stdbool.h>
+#include <errno.h>
 
 # define MAX_BUF 200
 # define ERROR	-1
@@ -25,6 +27,12 @@ enum tokens
     white_space = ' ',
     char_null = 0,
     new_lin = '\n'
+};
+
+struct s_builtins
+{
+	char	*name;
+	int		(*func)(int argc, char **argv);
 };
 
 /*
@@ -63,7 +71,7 @@ typedef struct s_redirection
 typedef struct s_command
 {
 	char	**cmd; //cmd
-    int     num_cmd;
+    int     num_cmds;
     int     num_of_args;
     int     pipe_fd[2];
     int     fork;
@@ -79,10 +87,9 @@ int ft_check(t_list** head, char *line);
 t_command *ft_parser(t_list** head, char *line , char **env);
 char	**ft_split(char const *s, char c);
 int	ft_strcmp(char *s1, char *s2);
-char	*ft_strdup(char *src);
-char    *find_commande(char *cmd, char **envp);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strstr(char *str, char *to_find);
+char	*ft_strdup_n(char *src);
+//char    *find_commande(char *cmd, char **envp);
+char	*ft_strjoin_n(char *s1, char *s2);
 char *expander(char *var, char **envp);
 void    ft_lstadd_back(t_list **lst, t_list *new);
 void serach_dollar(t_list** head, char **envp);
@@ -147,8 +154,6 @@ void	ft_free_env(char ***env);
 void	freememory(char **mem);
 int	wordlen(char const *s, char c);
 int	ft_wordcount(char const *s, char c);
-char	**fill(char **split, char const *s, char c);
-char	**ft_split(char const *s, char c);
 
 int	    ft_isalnum(int c);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
@@ -157,11 +162,10 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putstr_fd(char *s, int fd);
 char	*ft_strchr(const char *s, int c);
 int     ft_strncmp(const char *s1, const char *s2, size_t n);
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlen(const char *s);
+char	*ft_strdup(char *s1);
+char	*ft_strjoin(char*s1, char *s2);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_substr(char *s, unsigned int start, size_t len);
 
 //====== Error === //
 int ft_error(char *shell_name, char *s1, char *message);

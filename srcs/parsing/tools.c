@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 
 t_list	*ft_add(char *line, int start, int end, int type)
@@ -27,7 +27,7 @@ t_list	*ft_add(char *line, int start, int end, int type)
 	return (new);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin_n(char *s1, char *s2)
 {
 	char	*str;
 	int		i;
@@ -54,7 +54,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (str);
 }
 
-char	*ft_strdup(char *src)
+char	*ft_strdup_n(char *src)
 {
 	char	*t;
 	int		i;

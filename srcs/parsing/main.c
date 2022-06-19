@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 
 int	ft_strlen(char *s)
@@ -11,6 +11,27 @@ int	ft_strlen(char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+char    **copy_env(char **envp)
+{
+    int     i;
+    char    **rtn_env;
+    int     index;
+    
+    i = -1;
+    index = 0;
+    while (envp[++i])
+        index++;
+    rtn_env = malloc(sizeof(char *) * (index + 1));
+    i = 0;
+    while (i < index)
+    {
+        rtn_env[i] = ft_strdup(envp[i]);
+        i++;
+    }
+    rtn_env[i] = NULL;
+    return (rtn_env);
 }
 
 int	ft_strcmp(char *s1, char *s2)
@@ -49,7 +70,7 @@ int line_empty(char *str)
 			return (0);
 	return (1);
 }
-int main(int ac, char **av, char **env)
+int main(int ac, char **av, char **envp)
 {
 	int i;
 	int test;
@@ -60,6 +81,12 @@ int main(int ac, char **av, char **env)
 	cmd = NULL;
 	(void)ac;
 	(void)av;
+	g_env = copy_env(envp);
+    if (!g_env[i])
+    {
+        ft_free_env(&g_env);
+        return (ft_error("minishell", NULL, strerror(ENOMEM)));
+    }
 	while(1)
 	{
 		test = 0;
@@ -73,15 +100,15 @@ int main(int ac, char **av, char **env)
 			free(buffer);
 			continue;
 		}
-		if (!ft_strcmp(buffer, "exit"))
-		{
-			free (buffer);
-			return (write(2, "exit\n", 5), 0);
-		}
+		// if (!ft_strcmp(buffer, "exit"))
+		// {
+		// 	free (buffer);
+		// 	return (write(2, "exit\n", 5), 0);
+		// }
 		if (ft_strlen(buffer))
 		{
 			add_history (buffer);
-			head = ft_lexer(buffer,env);
+			head = ft_lexer(buffer,envp);
 			if(!ft_check(&head,buffer))
 			{
 				printf("minishell: syntax error\n");
@@ -90,12 +117,14 @@ int main(int ac, char **av, char **env)
 				test = 1;
 				continue ;
 			}
-			cmd = ft_parser(&head,buffer,env);
+			cmd = ft_parser(&head,buffer,envp);
+			if (cmd != NULL)
+				g_env = execute_root(cmd, envp, i);
 		}
-		if(!test)
-			deleteList(&head);
-		free_all(cmd);
-		free(buffer);
+		// if(!test)
+		// 	deleteList(&head);
+		// free_all(cmd);
+		// free(buffer);
     }
     return 0;
 }

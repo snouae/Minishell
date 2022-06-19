@@ -8,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This program built for i386-apple-darwin11.3.0
  
 
-# Make data base, printed on Sun Jun 19 15:32:25 2022
+# Make data base, printed on Sun Jun 19 16:18:42 2022
 
 # Variables
 
@@ -20,8 +20,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 VSCODE_LOG_NATIVE = false
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
-# makefile (from `Makefile', line 6)
-INCLUDES = -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+# makefile (from `Makefile', line 14)
+INCLUDES = -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # automatic
@@ -30,7 +30,7 @@ INCLUDES = -I minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 CURDIR := /Users/snouae/Desktop/Minishell
 # makefile
 SHELL = /bin/sh
-# makefile (from `Makefile', line 8)
+# makefile (from `Makefile', line 16)
 RM = rm -rf
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
@@ -40,11 +40,11 @@ _ = /usr/bin/make
 MAKEFILE_LIST :=  Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
-# makefile (from `Makefile', line 4)
+# makefile (from `Makefile', line 12)
 OBJS = $(FILES:.c=.o)
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n000cdvw0033fz/T/vscode-ipc-5596d38c-6f00-4cfe-8b1c-20466998742c.sock
-# makefile (from `Makefile', line 7)
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n000cdvw0033fz/T/vscode-ipc-68742c9c-fc69-4bcf-ac09-e9ddde648e6e.sock
+# makefile (from `Makefile', line 15)
 READLINE = -lreadline -L/goinfre/snouae/.brew/opt/readline/lib
 # environment
 VSCODE_CWD = /
@@ -79,7 +79,7 @@ VSCODE_CODE_CACHE_PATH = /Users/snouae/Library/Application Support/Code/CachedDa
 # environment
 LOGNAME = snouae
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 ZSH = /Users/snouae/.oh-my-zsh
 # environment
@@ -102,7 +102,7 @@ MAKE_VERSION := 3.81
 USER = snouae
 # makefile
 .DEFAULT_GOAL := all
-# makefile (from `Makefile', line 5)
+# makefile (from `Makefile', line 13)
 NAME = minishell
 # environment
 LESS = -R
@@ -159,7 +159,7 @@ LANG = C
 # environment
 VSCODE_PID = 42141
 # makefile (from `Makefile', line 3)
-FILES = main.c tools.c ft_lexer.c check_syntax.c parser.c check_command.c ft_split.c expander.c ft_riderct.c
+FILES = srcs/parsing/main.c srcs/parsing/tools.c srcs/parsing/ft_lexer.c srcs/parsing/check_syntax.c srcs/parsing/parser.c srcs/parsing/check_command.c srcs/parsing/ft_split.c srcs/parsing/expander.c srcs/parsing/ft_riderct.c srcs/builtins/builtin_cd.c srcs/builtins/builtin_echo.c srcs/builtins/builtin_env.c srcs/builtins/builtin_exit.c srcs/builtins/builtin_export.c srcs/builtins/builtin_pwd.c srcs/builtins/builtin_root.c srcs/builtins/builtin_unset.c srcs/env/env_modify.c srcs/env/env.c srcs/exec/exec_utils.c srcs/exec/exec.c srcs/utils/builtin_utils.c srcs/utils/error.c srcs/libft/ft_isalnum.c srcs/libft/ft_memcpy.c srcs/libft/ft_putchar_fd.c srcs/libft/ft_putendl_fd.c srcs/libft/ft_putstr_fd.c  srcs/libft/ft_split.c srcs/libft/ft_strchr.c  srcs/libft/ft_substr.c srcs/libft/ft_strjoin.c srcs/libft/ft_strncmp.c srcs/libft/ft_strnstr.c srcs/libft/ft_strdup.c
 # variable set hash-table stats:
 # Load=74/1024=7%, Rehash=0, Collisions=3/107=3%
 
@@ -169,20 +169,55 @@ FILES = main.c tools.c ft_lexer.c check_syntax.c parser.c check_command.c ft_spl
 
 # Directories
 
-# . (device 16777225, inode 3356740): 17 files, no impossibilities.
+# . (device 16777225, inode 3356740): 9 files, no impossibilities.
+# includes (device 16777225, inode 3432763): 4 files, no impossibilities so far.
+# srcs/parsing (device 16777225, inode 3432141): 10 files, no impossibilities so far.
 
-# 17 files, no impossibilities in 1 directories.
+# 23 files, no impossibilities in 3 directories.
 
 # Implicit Rules
 
-%.o: %.c minishell.h
-#  commands to execute (from `Makefile', line 16):
+%.o: %.c includes/minishell.h
+#  commands to execute (from `Makefile', line 23):
 	$(CC) $(FLAGS) -c $< -o $@ $(INCLUDES)
 	
 
 # 1 implicit rules, 0 (0.0%) terminal.
 
 # Files
+
+# Not a target:
+srcs/parsing/ft_split.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/builtins/builtin_root.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/parsing/main.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-06-19 16:16:56
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+srcs/libft/ft_putchar_fd.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/utils/error.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 all: minishell clean
 #  Command-line target.
@@ -194,16 +229,25 @@ all: minishell clean
 # Load=0/32=0%, Rehash=0, Collisions=0/5=0%
 
 # Not a target:
-main.c:
-#  Implicit rule search has been done.
-#  Last modified 2022-06-19 13:48:31
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+srcs/libft/ft_putendl_fd.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
-ft_split.o:
+srcs/env/env_modify.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_memcpy.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/builtins/builtin_cd.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -217,31 +261,62 @@ ft_split.o:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-15 22:17:58
+#  Last modified 2022-06-19 16:17:53
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
-check_syntax.o:
+srcs/parsing/expander.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
-minishell: main.o tools.o ft_lexer.o check_syntax.o parser.o check_command.o ft_split.o expander.o ft_riderct.o
+# Not a target:
+srcs/parsing/ft_lexer.o:
 #  Implicit rule search has not been done.
-#  Last modified 2022-06-19 15:22:29
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_strjoin.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_split.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/exec/exec_utils.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+ 
+minishell: srcs/parsing/main.o srcs/parsing/tools.o srcs/parsing/ft_lexer.o srcs/parsing/check_syntax.o srcs/parsing/parser.o srcs/parsing/check_command.o srcs/parsing/ft_split.o srcs/parsing/expander.o srcs/parsing/ft_riderct.o srcs/builtins/builtin_cd.o srcs/builtins/builtin_echo.o srcs/builtins/builtin_env.o srcs/builtins/builtin_exit.o srcs/builtins/builtin_export.o srcs/builtins/builtin_pwd.o srcs/builtins/builtin_root.o srcs/builtins/builtin_unset.o srcs/env/env_modify.o srcs/env/env.o srcs/exec/exec_utils.o srcs/exec/exec.o srcs/utils/builtin_utils.o srcs/utils/error.o srcs/libft/ft_isalnum.o srcs/libft/ft_memcpy.o srcs/libft/ft_putchar_fd.o srcs/libft/ft_putendl_fd.o srcs/libft/ft_putstr_fd.o srcs/libft/ft_split.o srcs/libft/ft_strchr.o srcs/libft/ft_substr.o srcs/libft/ft_strjoin.o srcs/libft/ft_strncmp.o srcs/libft/ft_strnstr.o srcs/libft/ft_strdup.o
+#  Implicit rule search has not been done.
+#  Last modified 2022-06-19 16:18:01
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/5=0%
-#  commands to execute (from `Makefile', line 13):
+#  commands to execute (from `Makefile', line 20):
 	$(CC) $(FLAGS) $^ $(READLINE)  -o $(NAME)
 	
 
 # Not a target:
-ft_lexer.o:
+srcs/utils/builtin_utils.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/builtins/builtin_echo.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -250,18 +325,30 @@ fclean: clean
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 22):
+#  commands to execute (from `Makefile', line 29):
 	$(RM) $(NAME)
 	
 
 # Not a target:
-check_command.o:
+srcs/builtins/builtin_export.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
 # Not a target:
-parser.o:
+srcs/parsing/ft_riderct.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/parsing/parser.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/parsing/tools.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -273,7 +360,7 @@ parser.o:
 #  File has not been updated.
 
 # Not a target:
-ft_riderct.o:
+srcs/parsing/check_syntax.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -282,64 +369,135 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 19):
+#  commands to execute (from `Makefile', line 26):
 	$(RM) $(OBJS)
 	
 
-main.o: main.c minishell.h
+# Not a target:
+srcs/libft/ft_substr.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+srcs/parsing/main.o: srcs/parsing/main.c includes/minishell.h
 #  Implicit rule search has been done.
-#  Implicit/static pattern stem: `main'
+#  Implicit/static pattern stem: `srcs/parsing/main'
 #  File does not exist.
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # automatic
-# @ := main.o
+# @ := srcs/parsing/main.o
 # automatic
 # % := 
 # automatic
-# * := main
+# * := srcs/parsing/main
 # automatic
-# + := main.c minishell.h
+# + := srcs/parsing/main.c includes/minishell.h
 # automatic
 # | := 
 # automatic
-# < := main.c
+# < := srcs/parsing/main.c
 # automatic
-# ^ := main.c minishell.h
+# ^ := srcs/parsing/main.c includes/minishell.h
 # automatic
-# ? := main.c minishell.h
+# ? := srcs/parsing/main.c includes/minishell.h
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/15=7%
-#  commands to execute (from `Makefile', line 16):
+#  commands to execute (from `Makefile', line 23):
 	$(CC) $(FLAGS) -c $< -o $@ $(INCLUDES)
 	
 
 # Not a target:
-minishell.h:
+srcs/exec/exec.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/builtins/builtin_env.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/builtins/builtin_exit.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/parsing/check_command.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_strncmp.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_isalnum.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_strdup.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+includes/minishell.h:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-19 15:31:00
+#  Last modified 2022-06-19 16:10:06
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
-expander.o:
+srcs/builtins/builtin_pwd.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
 # Not a target:
-tools.o:
+srcs/env/env.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_strchr.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/builtins/builtin_unset.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_strnstr.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+srcs/libft/ft_putstr_fd.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=18/1024=2%, Rehash=0, Collisions=0/48=0%
+# Load=44/1024=4%, Rehash=0, Collisions=0/100=0%
 # VPATH Search Paths
 
- 
 # No `vpath' search paths.
 
 # No general (`VPATH' variable) search path.
@@ -349,6 +507,6 @@ tools.o:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Sun Jun 19 15:32:25 2022
+# Finished Make data base on Sun Jun 19 16:18:42 2022
 
  
