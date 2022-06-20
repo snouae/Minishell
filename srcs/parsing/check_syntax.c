@@ -36,30 +36,24 @@ int check_quote(char *str)
     return (1);
 }
 
-int check_pipe(char *str, int j, t_list** head, t_list *n)
+int check_pipe(char *str, t_list **current)
 {
     int i;
     int c;
-    t_list *current = *head;
-    t_list *next;
 
     c = 0;
     i = 0;
-    // while (current->type != 0)
-    // {
-    //     next = current->next; 
-    //     current = next;
-    // }
-    // if (!j ||  current->type == pipe_token || n->type == pipe_token 
-    // ||( n->next && n->type == white_space && n->next->type == pipe_token))
-    //     return (0);
+    (*current) = (*current)->next;
+    while (cherche_symbol((*current)->str[0], " \t\n\v\f\r") && (*current) != NULL)
+        (*current) = (*current)->next; 
+    
     while (str[i])
     {
         if (str[i] == pipe_token)
             c++;
     i++;
     }
-    if (c != 1)
+    if (c != 1 || (*current)->type == pipe_token || (*current) != NULL)
         return (0);
     return (1);
 }
@@ -94,7 +88,6 @@ int ft_check(t_list** head, char *line)
    t_list *current;
 
    current = *head;
-   int c = 0;
     while (current != NULL) 
    {
         if (current->type == double_quo)
@@ -109,7 +102,7 @@ int ft_check(t_list** head, char *line)
         }
         else if (current->type == pipe_token)
         {
-           if (!check_pipe(current->str, c, head, current->next))
+           if (!check_pipe(current->str, &current))
                 return (0);
         }
         else if ((current->type == redirect_in) || (current->type == redirect_out))
@@ -118,7 +111,6 @@ int ft_check(t_list** head, char *line)
                 return (0);
         }
         current = current->next; 
-        c++;
    }
    return (1);
 }

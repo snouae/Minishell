@@ -37,18 +37,18 @@ char    **exec_1(t_command *data, int index, char **envp)
     if (index > 0 && data[index].num_cmds > 1)
     {
         dup2(data[index].pipe_fd[0], STDIN_FILENO);
-        close(data[index].pipe_fd[0]);
-        close(data[index].pipe_fd[1]);
+       // close(data[index].pipe_fd[0]);
+       // close(data[index].pipe_fd[1]);
     }
     if (data[index].num_cmds != 0)
     {
         dup2(data[index].pipe_fd[1], STDOUT_FILENO);
-        close(data[index].pipe_fd[0]);
-        close(data[index].pipe_fd[1]);
+       // close(data[index].pipe_fd[0]);
+       // close(data[index].pipe_fd[1]);
     }
     // if (data[index].redirect->file)
     //     redirect_execution(data, envp);
-    printf(" the bulting %d\n",data[index].is_builtin_in);
+   // printf(" the bulting %d\n",data[index].is_builtin_in);
     if (data[index].is_builtin_in != 0)
         builtin_root(data[index].cmd);
     else if (data[index].is_builtin_in == 0)
@@ -82,8 +82,8 @@ void execute_root(t_command *data, char **envp) //, t_list *list need it later
         }
         else
         {
-            close(data[i].pipe_fd[0]);
-            close(data[i].pipe_fd[1]);
+           // close(data[i].pipe_fd[0]);
+           //close(data[i].pipe_fd[1]);
         }
         i++;
     }

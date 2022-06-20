@@ -19,8 +19,10 @@ gcc  -c srcs/builtins/builtin_root.c -o srcs/builtins/builtin_root.o -I includes
 gcc  -c srcs/builtins/builtin_unset.c -o srcs/builtins/builtin_unset.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/env/env_modify.c -o srcs/env/env_modify.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/env/env.c -o srcs/env/env.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+ 
 gcc  -c srcs/exec/exec_utils.c -o srcs/exec/exec_utils.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/exec/exec.c -o srcs/exec/exec.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+ 
 gcc  -c srcs/utils/builtin_utils.c -o srcs/utils/builtin_utils.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/utils/error.c -o srcs/utils/error.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/libft/ft_isalnum.c -o srcs/libft/ft_isalnum.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
@@ -29,6 +31,7 @@ gcc  -c srcs/libft/ft_putchar_fd.c -o srcs/libft/ft_putchar_fd.o -I includes/min
 gcc  -c srcs/libft/ft_putendl_fd.c -o srcs/libft/ft_putendl_fd.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/libft/ft_putstr_fd.c -o srcs/libft/ft_putstr_fd.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/libft/ft_split.c -o srcs/libft/ft_split.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
+ 
 gcc  -c srcs/libft/ft_strchr.c -o srcs/libft/ft_strchr.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/libft/ft_substr.c -o srcs/libft/ft_substr.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 gcc  -c srcs/libft/ft_strjoin.c -o srcs/libft/ft_strjoin.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include

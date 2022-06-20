@@ -94,21 +94,21 @@ int main(int ac, char **av, char **envp)
 		signal(SIGINT, handler);
 		//rl_on_new_line();
 		//pause();
-		buffer = readline("\033[1mminishell-2.0$> \033[m");
+		buffer = readline("\033[1mminishell$> \033[m");
 		 if (!buffer)
 		 {
 			 break;
 		 }
-		// if (line_empty(buffer))
-		// {
-		// 	free(buffer);
-		// 	continue;
-		// }
-		// if (!ft_strcmp(buffer, "exit"))
-		// {
-		// 	free (buffer);
-		// 	return (write(2, "exit\n", 5), 0);
-		// }
+		if (line_empty(buffer))
+		{
+			free(buffer);
+			continue;
+		}
+		if (!ft_strcmp(buffer, "exit"))
+		{
+			free (buffer);
+			return (write(2, "exit\n", 5), 0);
+		}
 		if (ft_strlen(buffer))
 		{
 			add_history (buffer);
@@ -121,14 +121,13 @@ int main(int ac, char **av, char **envp)
 				test = 1;
 				continue ;
 			}
-			signal(SIGQUIT, SIG_IGN);
 			cmd = ft_parser(&head,buffer,envp);
 			//execute_root(cmd, g_env);
 		}
-		// if(!test)
-		// 	deleteList(&head);
-		// free_all(cmd);
-		// free(buffer);
+		if(!test)
+			deleteList(&head);
+		free_all(cmd);
+		free(buffer);
     }
     return 0;
 }

@@ -30,7 +30,7 @@ int builtin_export(int argc, char **argv)
         {
             if (check_arg(argv[i]) == false)
             {
-                ft_error("minishell", argv[i], "not a valid identifier");
+                ft_error("minishell", argv[i], "not a valid identifier\n");
                 status = EXIT_FAILURE;
             }
             else if (ft_strchr(argv[i], '='))
@@ -106,7 +106,7 @@ static bool check_arg(char *argv)
     i = 0;
     if (argv[0] == '\0' || argv[0] == '=')
         return (false);
-    while (argv[i] != '\0'  && argv[i] != '=' &&    (argv[i]))
+    while (argv[i] != '\0'  && argv[i] != '=')
         i++;
     if (argv[i] == '=' || argv[i] == '\0')
         return (true);

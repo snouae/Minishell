@@ -55,17 +55,25 @@ static char    *get_the_print_working_dir(int argc, char **argv)
     return (dir);
 }
 
+/*
+check if PWD exists for real in g_env ---- to handle weird cases
+like "cd dlfkdsf" so if yes then i need to compare between OLDPWD and PWD 
+if nothing changed that means bli rah trat chi haja b7al dik command liwrit
+
+if no then i need to remove OLDPWD content and replace it 
+with the previous one before using cd
+*/
+
 static int update_pwd(void)
 {
     char    path[MAX_BUF];
-    if (get_value("PWD")) // check if PWD exists for real in g_env ---- to handle weird cases
-    { // like "cd dlfkdsf" so if yes then i need to compare between OLDPWD and PWD 
-        // if nothing changed that means bli rah trat chi haja b7al dik command liwrit  
+    if (get_value("PWD"))
+    {
         if (set_the_env("OLDPWD", get_value("PWD")) == ERROR)
             return (ERROR);
     }
-    else // if no then i need to remove OLDPWD content and replace it 
-        unset_the_var("OLDPWD"); // with the previous one before using cd
+    else
+        unset_the_var("OLDPWD");
     if (getcwd(path, MAX_BUF) == NULL)
     {
         ft_error("minishell", "cd", strerror(ENOMEM));
