@@ -58,11 +58,12 @@ int put_the_var(char *str)
             i++;
         g_env[i] = new_var;
     }
-    i = 0;
-    while (g_env[i])
-    {
-        ft_putendl_fd(g_env[i], 1);
-    }
+    // i = 0;
+    // while (g_env[i])
+    // {
+    //     ft_putendl_fd(g_env[i], 1);
+    //     i++;
+    // }
     return (0);
 }
 

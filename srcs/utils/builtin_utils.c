@@ -50,12 +50,14 @@ int remove_from_env(char ***env, char *str)
     int     i;
     
     new_env = malloc(env_count(*env) * sizeof(char *));
-    // if (new_env == NULL)
-    //     RETURN AN ERROR MESSAGE
+    if (new_env == NULL)
+        return(ERROR);
     i = 0;
-    while ((*env)[i] != str)
+    printf("heelo\n");
+    while ((*env)[i])
     {
-        new_env[i] = (*env)[i];
+        if(ft_strncmp((*env)[i], str, ft_strlen(str)))
+            new_env[i] = (*env)[i];
         i++;
     }
     new_env[i] = NULL;

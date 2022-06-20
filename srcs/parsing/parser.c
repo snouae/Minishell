@@ -272,6 +272,8 @@ void fill_cmd(t_command *cmd, char **env, int nbr_args, t_list *tmp)
    j = 0;
    join = NULL;
    cmd->cmd = (char **)malloc(sizeof(char *) * (nbr_args + 1));
+   // if(!cmd->cmd)
+   //    return ;
    cmd->redirect = NULL;
    while (tmp != NULL)
    {
@@ -375,6 +377,8 @@ t_command *ft_parser(t_list** head, char *line , char **env)
    current = *head;
    nbr_cmds = count_commads(head);
    cmd = (t_command *)malloc(sizeof(t_command) * count_commads(head));
+   if (!cmd)
+      return (NULL);
    while (i < nbr_cmds)
    {
    cmd[i].num_cmds = nbr_cmds;

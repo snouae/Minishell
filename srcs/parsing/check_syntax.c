@@ -62,12 +62,9 @@ int check_red(char *str, t_list *nx)
 {
     int i;
     int c;
-    int w;
 
     i = 0;
     c = 0;
-    w = 0;
-
      while (((str[i] == redirect_in || str[i] == redirect_out)))
      {
          c++;
