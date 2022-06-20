@@ -6,7 +6,7 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 17:01:28 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/17 04:11:35 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/20 17:02:54 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int put_the_var(char *str)
     old_var = search_env(str);
     printf("%s\n", old_var);
     status = replace_str_env(&g_env, old_var, new_var);
+    puts("heeeeeeere\n");
     printf("%s\n", new_var);
     if (status == ERROR)
     {
@@ -51,13 +52,16 @@ int put_the_var(char *str)
         if (status == ERROR)
             return (ft_error("minishell", NULL, strerror(ENOMEM)));
     }
-    else if (status == 0)
-    {
-        i = 0;
-        while (g_env[i] != old_var)
-            i++;
-        g_env[i] = new_var;
-    }
+    // else if (status == 0)
+    // {
+    //     i = 0;
+    //     printf("the old var is: %s")
+    //     while (ft_strncmp(g_env[i], old_var, ft_strlen(old_var)) && g_env[i] != NULL)
+    //         i++;
+    //     printf("check\n");
+    //     if (!ft_strncmp(g_env[i], old_var, ft_strlen(old_var)))
+    //         g_env[i] = new_var;
+    // }
     // i = 0;
     // while (g_env[i])
     // {

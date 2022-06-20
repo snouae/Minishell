@@ -6,7 +6,7 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 11:54:41 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/16 21:37:21 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/20 12:28:16 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int builtin_export(int argc, char **argv)
                 status = EXIT_FAILURE;
             }
             else if (ft_strchr(argv[i], '='))
-                put_the_var(argv[i]);
+                status = put_the_var(argv[i]);
             i++;
         }
     }

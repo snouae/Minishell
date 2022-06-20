@@ -6,7 +6,7 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 13:25:11 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/16 16:28:01 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/20 17:02:21 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int builtin_cd(int argc, char **argv)
         return (EXIT_FAILURE);
     if (chdir(dir) == -1)
     {
-        ft_error("minishell", "cd", dir);
+        printf("minishell: cd: %s: No such file or directory\n", dir);
         return (ERROR);
     }
-    if (argv[1] && ft_strncmp(argv[1], "-", 2))
+    if (argv[1] && !ft_strcmp(argv[1], "-"))
         ft_putendl_fd(dir, STDOUT_FILENO);
     if (update_pwd() == ERROR)
         return (EXIT_FAILURE);
@@ -38,20 +38,21 @@ static char    *get_the_print_working_dir(int argc, char **argv)
 {
     char    *dir;
 
+    dir = NULL;
     if (argc == 1)
     {
         dir = get_value("HOME");
         if (dir == NULL)
             ft_error("minishell", "cd", " HOME not set");
     }
-    else if (argv[1] && ft_strncmp(argv[1], "-", 2) == 0) // "cd -"
+    else if (argv[1] && ft_strcmp(argv[1], "-") == 0) // "cd -"
     {
         dir = get_value("OLDPWD");
         if (dir == NULL)
             ft_error("minishell", "cd", "OLDPWD not set");
     }
     else
-        dir = get_value(argv[1]);
+        dir = argv[1];
     return (dir);
 }
 

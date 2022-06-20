@@ -92,9 +92,13 @@ int main(int ac, char **av, char **envp)
 		test = 0;
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handler);
+		//rl_on_new_line();
+		//pause();
 		buffer = readline("\033[1mminishell$> \033[m");
 		 if (!buffer)
+		 {
 			 break;
+		 }
 		if (line_empty(buffer))
 		{
 			free(buffer);
@@ -120,10 +124,10 @@ int main(int ac, char **av, char **envp)
 			cmd = ft_parser(&head,buffer,envp);
 			execute_root(cmd, g_env);
 		}
-		if(!test)
-			deleteList(&head);
-		free_all(cmd);
-		free(buffer);
+		// if(!test)
+		// 	deleteList(&head);
+		// free_all(cmd);
+		// free(buffer);
     }
     return 0;
 }
