@@ -6,7 +6,7 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:34:15 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/18 16:03:14 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/22 13:30:23 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,9 @@ void ft_command_not_found(char **paths, char *cmd)
         free(paths[i]);
     free(paths);
     ft_putstr_fd(cmd, 2);
-    ft_putstr_fd(": command not found", 2);
+    ft_putstr_fd(": command not found\n", 2);
+    // g_exit_value = 127;
+    exit(127);
     // i need to free the t_command to avoid leaks
-    exit(EXIT_FAILURE);
+    //exit(EXIT_FAILURE);
 }

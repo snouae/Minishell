@@ -1,28 +1,39 @@
-#include "../../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tools.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/22 11:12:15 by snouae            #+#    #+#             */
+/*   Updated: 2022/06/22 11:12:16 by snouae           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "../../includes/minishell.h"
 
 t_list	*ft_add(char *line, int start, int end, int type)
 {
 	t_list	*new;
-    int     i;
-    int     j;
-    
-    i = 0;
-    j = start;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = start;
 	new = (t_list *)malloc(sizeof(t_list));
 	if (!new)
 		return (NULL);
-        end++;
-    new->str =  (char *)malloc(sizeof(char) * (end - start) + 1);
-    while (j < end)
-    {
-        new->str[i] = line[j];
-        i++;
-        j++;
-    }
-    new->type = type;
-    new->len = i;
-    new->str[i] = '\0';
+	end++;
+	new->str = (char *)malloc(sizeof(char) * (end - start) + 1);
+	while (j < end)
+	{
+		new->str[i] = line[j];
+		i++;
+		j++;
+	}
+	new->type = type;
+	new->len = i;
+	new->str[i] = '\0';
 	new->next = NULL;
 	return (new);
 }
@@ -61,7 +72,7 @@ char	*ft_strdup_n(char *src)
 	int		j;
 
 	i = ft_strlen(src);
-	if(!src)
+	if (!src)
 		return (NULL);
 	t = (char *)malloc(i + 1 * sizeof(char));
 	if (t == NULL)

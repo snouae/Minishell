@@ -3,117 +3,105 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/07 21:47:12 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/20 18:13:56 by aoumad           ###   ########.fr       */
+/*   Created: 2022/06/21 11:14:44 by aoumad            #+#    #+#             */
+/*   Updated: 2022/06/22 17:43:00 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char    **execute_command(t_command *data, char **envp, int index)
+static void    fd_generator(t_command *data, int index)
 {
-    char    *path;
-    int     pid;
-    path = get_path(envp, data, index);
-    pid = -1;
-    printf("%s\n", path);
-    if (data[index].redirect != NULL)
+    if (index == 0)
     {
-        pid = fork();
-        if (pid == 0)
-            execve(path, data[index].cmd, envp);
-        waitpid(-1, NULL, 0);
+        data[0].prev = NULL;
+        data[0].next = NULL;
+        if (data[0].num_cmds > 1)
+            data[0].next = data[0].pipe;
+    }
+    else if (index == data[0].num_cmds - 1)
+    {
+        data[index].prev = data[index - 1].pipe;
+        data[index].next = NULL;
     }
     else
     {
-        pid = fork();
-        if (pid == 0)
-            execve(path, data[index].cmd, envp);
-        waitpid(-1, NULL, 0);
+        data[index].prev = data[index - 1].pipe;
+        data[index].next = data[index].pipe;
     }
-    return (envp);
 }
 
-char    **exec_1(t_command *data, int index, char **envp)
-{
-    if (index > 0 && data[index].num_cmds > 1)
-    {
-        dup2(data[index].pipe_fd[0], STDIN_FILENO);
-        // close(data[index].pipe_fd[0]);
-        //close(data[index].pipe_fd[1]);
-    }
-    if (data[index].num_cmds != 0  && index != data[index].num_cmds - 1)
-    {
-        dup2(data[index].pipe_fd[1], STDOUT_FILENO);
-       //close(data[index].pipe_fd[0]);
-       //close(data[index].pipe_fd[1]);
-    }
-    // if (data[index].redirect->file)
-    //     redirect_execution(data, envp);
-    if (data[index].is_builtin_in != 0)
-    {
-        builtin_root(data[index].cmd);
-    }
-    else if (data[index].is_builtin_in == 0)
-    {
-        envp = execute_command(data, envp, index);
-        printf(" the bulting %d\n",data[index].is_builtin_in);
-    }
-    return (envp);
-}
-
-void execute_root(t_command *data, char **envp) //, t_list *list need it later
+void    execute_root(t_command *data, char **envp)
 {
     int status;
     int i;
     int pid;
-    int nb_args;
+    int fd[2];
+    char *path;
+    int rtn_execve;
 
-    i = 0; // ch7al mne data[index] 3ndi
+    rtn_execve = 0;
     status = 0;
-    nb_args = 0;
     pid = -1;
-
-    while(i < data[0].num_cmds)
+    i = 0;
+    while (i < data[0].num_cmds)
+        fd_generator(data, i++);
+    i = 0;
+    while (i < data[0].num_cmds)
     {
-       // if (i > 0)
-        pid  = ft_pipe_built(data, pid, i);
-   // puts("heeeeeere");
-        printf("is built %d\n", data[i].is_builtin_in);
-        if (pid == 0 || (data[i].is_builtin_in >= 0 && data[i].fork == 0))
+        data[i].is_builtin_in = builtin_check(data[i].cmd[0]);
+        if (data[i].next)
+            pipe(data[i].next);
+        ft_save_io(fd);
+        if (data[i].prev)
         {
-            printf("the pid is %d\n",pid);
-            envp = exec_1(data, i, envp);
+            dup2(data[i].prev[0], STDIN_FILENO);
+            close(data[i].prev[0]);
         }
-        else
+        if (data[i].next)
         {
-           close(data[i].pipe_fd[0]);
-           close(data[i].pipe_fd[1]);
-           
+            dup2(data[i].next[1], STDOUT_FILENO);
+            close(data[i].next[1]);
         }
+        if (data[i].is_builtin_in)
+        {
+            builtin_root(data[i++].cmd);
+            ft_reset_io(fd);
+            // if (i == data[0].num_cmds - 1)
+            //     waitpid(pid, &status, 0);
+            // while (1)
+            // {
+            //     if (waitpid(-1, 0, 0) == -1)
+            //         break;
+            // }
+            continue;
+        }
+            pid = fork();
+            if (pid == 0)
+            {
+                if (data[i].prev)
+                    close(data[i].prev[1]);
+                if (data[i].next)
+                    close(data[i].next[0]);
+                path = get_path(envp, data, i);
+                rtn_execve = execve(path, data[i].cmd, envp);
+                exit(126);
+            }
+            ft_reset_io(fd);
+            // if (i == data[0].num_cmds - 1)
+            //     waitpid(pid, &status, 0);
+            // while (1)
+            // {
+            //     if (waitpid(-1, 0, 0) == -1)
+            //         break;
+            // }
         i++;
-    }
-    // while (--i)
-    // {
-    //     	waitpid(-1, &status, 0);
-	// 	// if (WIFEXITED(status))
-	// 	// 	g_exit_value = WEXITSTATUS(status);
-    // }
-   //return (envp);
-}
-
-int ft_pipe_built(t_command *data, int pid, int index)
-{
-    data[index].is_builtin_in = builtin_check(data[index].cmd[0]);
-    printf("the nbr %d\n",data[index].is_builtin_in);
-    if (data[index].num_cmds > 1 && index > 0)
-        pipe(data[index].pipe_fd);
-    if (data[index].is_builtin_in == 0 && data[index].num_cmds > 1)
+    } 
+     while (1)
     {
-        pid = fork();
-        data[index].fork = 1; // nchofo blano
+        if (waitpid(-1, 0, 0) == -1)
+            break;
     }
-    return (pid);
 }

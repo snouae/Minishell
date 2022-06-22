@@ -73,11 +73,16 @@ typedef struct s_command
 	char	**cmd; //cmd
     int     num_cmds;
     int     num_of_args;
-    int     pipe_fd[2];
-    int     fork;
+    int     pipe[2];
+    int     *prev;
+    int     *next;
     int     is_builtin_in;
     struct s_redirection *redirect;
 }		t_command;
+
+//======= oussama save io ======== yarbi tkhdm//
+void    ft_reset_io(int fd[]);
+void    ft_save_io(int fd[]);
 
 t_list *ft_lexer(char *line , char **env);
 t_list	*ft_add(char *line, int start, int end, int type);
@@ -99,6 +104,7 @@ void open_files(t_command *cmd, int leng);
 int cherche_symbol(char c, char *str);
 void deleteList(t_list** head_ref);
 void free_all(t_command *cmd);
+int    ft_heredoc(t_command *data, int index, char *eof);
 /////////////////
 // ===== builtin functions ====== //
 int    builtin_root(char **argv);
@@ -136,9 +142,9 @@ int     open_file(t_redirection *redirect);
 
 //====== execute function =====//
 void execute_root(t_command *data, char **envp);
-char    **execute_command(t_command *data, char **envp, int index);
-char    **exec_1(t_command *data, int index, char **envp);
-int     ft_pipe_built(t_command *data, int pid, int index);
+// int     execute_command(t_command *data, char **envp, int index, int pid);
+// int    exec_1(t_command *data, int index, char **envp, int pid);
+// int     ft_pipe_built(t_command *data, int pid, int index);
 
 //========================================
 // ===== builtin_utils ==== //

@@ -21,8 +21,8 @@ void open_files(t_command *cmd, int leng)
                 }
                 else if (head->type == APPEND)
                     head->fd = open(head->file, O_WRONLY | O_APPEND | O_CREAT, 0664);
-                // if (redirect->type == HEREDOC)
-                //     fd = ft_heredoc() HEREDOC FUNCTION WITH INT TYPE, fd = ft_heredoc(...)
+                 if (head->type == HEREDOC)
+                    head->fd = ft_heredoc(cmd, i, head->file);
                 if (head->fd < 0)
                 {
                     //printf("minishell: ");

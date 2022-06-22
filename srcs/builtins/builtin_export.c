@@ -6,7 +6,7 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 11:54:41 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/20 12:28:16 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/22 10:29:17 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static char **sort_env(char **env)
         j = 0;
         while (j < (count - 1))
         {
-            if (ft_strncmp(env[j], env[j + 1], ft_strlen(env[j]) + 1) > 0)
+            if (ft_strcmp(env[j], env[j + 1]) > 0)
             {
                 tmp = env[j];
                 env[j] = env[j + 1];

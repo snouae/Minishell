@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/22 13:18:29 by snouae            #+#    #+#             */
+/*   Updated: 2022/06/22 18:48:51 by snouae           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 
@@ -121,7 +133,9 @@ int main(int ac, char **av, char **envp)
 				test = 1;
 				continue ;
 			}
-			cmd = ft_parser(&head,buffer,envp);
+			cmd = ft_parser(&head,buffer,g_env);
+			printf("the leng %d\n", cmd[0].num_cmds);
+			open_files(cmd, cmd[0].num_cmds);
 			execute_root(cmd, g_env);
 		}
 		// if(!test)

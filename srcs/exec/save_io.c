@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*   save_io.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/26 09:50:51 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/22 10:46:51 by aoumad           ###   ########.fr       */
+/*   Created: 2022/06/20 22:09:53 by aoumad            #+#    #+#             */
+/*   Updated: 2022/06/21 17:40:45 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int builtin_pwd(int argc __attribute((unused)), 
-    char **argv __attribute((unused)))
+void    ft_save_io(int fd[])
 {
-    char buf[MAX_BUF];
-    if (getcwd(buf, sizeof(buf))) // getcwd returns null if path ain't found
-    {
-        ft_putendl_fd(buf, STDOUT_FILENO);
-        return (0);
-    }
-    else
-    {
-        ft_error("minishell", "pwd", strerror(ENOMEM));
-        return (EXIT_FAILURE);        
-    }
+    fd[0] = dup(STDIN_FILENO);
+    fd[1] = dup(STDOUT_FILENO);
+}
+
+void    ft_reset_io(int fd[])
+{
+    dup2(fd[0], STDIN_FILENO);
+    close(fd[0]);
+    dup2(fd[1], STDOUT_FILENO);
+    close(fd[1]);
 }

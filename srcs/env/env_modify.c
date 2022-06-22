@@ -6,7 +6,7 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 17:01:28 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/20 17:02:54 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/22 10:44:56 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ int put_the_var(char *str)
     if (new_var == NULL)
         return (ft_error("minishell", NULL, strerror(ENOMEM)));
     old_var = search_env(str);
-    printf("%s\n", old_var);
     status = replace_str_env(&g_env, old_var, new_var);
-    puts("heeeeeeere\n");
-    printf("%s\n", new_var);
     if (status == ERROR)
     {
         status = add_to_env(&g_env, new_var);
