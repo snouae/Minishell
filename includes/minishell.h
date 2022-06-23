@@ -105,6 +105,8 @@ int cherche_symbol(char c, char *str);
 void deleteList(t_list** head_ref);
 void free_all(t_command *cmd);
 int    ft_heredoc(t_command *data, int index, char *eof);
+char	*check_dollar(int *j, char *str, char *new, char **env);
+int line_empty(char *str);
 /////////////////
 // ===== builtin functions ====== //
 int    builtin_root(char **argv);
