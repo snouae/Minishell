@@ -6,11 +6,24 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 07:41:08 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/17 04:12:49 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/23 22:18:51 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static char	*ft_strchr_export(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (char )c)
+			return ((char *)s + 1);
+		s++;
+	}
+	if ((char )c == 0)
+		return ((char *)s+ 1);
+	return (NULL);
+}
 
 int env_count(char **env)
 {
@@ -64,7 +77,7 @@ int remove_from_env(char ***env, char *str)
     return (0);
 }
 
-int replace_str_env(char ***env, char *old_str, char *new_str)
+int replace_str_env(char ***env, char *old_str, char *new_str, int test)
 {
     int i;
 
@@ -77,7 +90,14 @@ int replace_str_env(char ***env, char *old_str, char *new_str)
         return (ERROR); // -1 definition in status means there is nothing
         // to replace in env and we gonna create new env_str
     free(old_str);
-    (*env)[i] = new_str;
+    if (test == 1)
+    {
+        //(*env)[i] = ft_strchr_export((*env)[i], '=');
+        new_str = ft_strchr_export(new_str, '=');
+        (*env)[i] = ft_strjoin((*env)[i], new_str);
+    }
+    else
+        (*env)[i] = new_str;
     return (0);    
 }
 

@@ -42,6 +42,7 @@ char	                **g_env;
 // pid_t				g_pid;
 // int					g_error;
 int						g_status;
+//int                     g_st;
 int                     g_exit_value;
 enum s_fileType
 {
@@ -65,14 +66,14 @@ typedef struct s_redirection
     char *file;
     int type;
     int fd;
+    int redirect_fd[2];
     struct s_redirection* next;
 } t_redirection;
 
 typedef struct s_command
 {
-	char	**cmd; //cmd
+	char	**cmd;
     int     num_cmds;
-    int     num_of_args;
     int     pipe[2];
     int     *prev;
     int     *next;
@@ -133,7 +134,7 @@ bool    check_var_is_char(char c);
 
 // ==== ENV MODIFY ====//
 int unset_the_var(char  *name);
-int put_the_var(char *str);
+int put_the_var(char *str, int test);
 int set_the_env(char *name, char *value);
 
 //=======================================
@@ -150,7 +151,7 @@ void execute_root(t_command *data, char **envp);
 
 //========================================
 // ===== builtin_utils ==== //
-int     replace_str_env(char ***env, char *old_str, char *new_str);
+int     replace_str_env(char ***env, char *old_str, char *new_str, int test);
 int     env_count(char **env);
 int     add_to_env(char ***env, char *str);
 int     remove_from_env(char ***env, char *str);

@@ -6,11 +6,59 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 14:52:59 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/22 16:48:49 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/24 20:35:01 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int		len(long nb)
+{
+	int		len;
+
+	len = 0;
+	if (nb < 0)
+	{
+		nb = nb * -1;
+		len++;
+	}
+	while (nb > 0)
+	{
+		nb = nb / 10;
+		len++;
+	}
+	return (len);
+}
+
+char	*ft_itoa(int nb)
+{
+	char *str;
+	long	n;
+	int		i;
+
+	n = nb;
+	i = len(n);
+	if (!(str = (char*)malloc(sizeof(char) * (i + 1))))
+		return (NULL);
+	str[i--] = '\0';
+	if (n == 0)
+	{
+		str[0] = 48;
+		return (str);
+	}
+	if (n < 0)
+	{
+		str[0] = '-';
+		n = n * -1;
+	}
+	while (n > 0)
+	{
+		str[i] = 48 + (n % 10);
+		n = n / 10;
+		i--;
+	}
+	return (str);
+}
 
 void	ft_lstadd_back1(t_redirection **lst, t_redirection *new)
 {
@@ -50,14 +98,23 @@ char	*check_dollar(int *j, char *str, char *new, char **env)
 
 	start = *j;
 	(*j)++;
-	while (str[*j] != double_quo && str[*j] != ' ' && str[*j] != tab && str[*j]
-		&& str[*j] != dollar && search_token(str[*j]) == -1
-		&& !cherche_symbol(str[*j], "\t!$%'()*+,-./:;<=>?@[]^`{|}~"))
-		(*j)++;
-	(*j)--;
-	dlr = fill_array(str, start, *j);
-	expndr = expander(dlr, env);
-	new = ft_strjoin_n(new, expndr);
+	if (str[*j] <= '9' && str[*j] >= '0')
+	{
+		dlr = fill_array(str, start, *j);
+		expndr = expander(dlr, env);
+		new = ft_strjoin_n(new, expndr);
+	}
+	else
+	{
+		while (str[*j] != '\"' && str[*j] != ' ' && str[*j] != tab && str[*j]
+			&& str[*j] != dollar && search_token(str[*j]) == -1
+			&& !cherche_symbol(str[*j], "\t!$%'()*+,-./:;<=>?@[]^`{|}~"))
+			(*j)++;
+		(*j)--;
+		dlr = fill_array(str, start, *j);
+		expndr = expander(dlr, env);
+		new = ft_strjoin_n(new, expndr);
+	}
 	return (new);
 }
 
@@ -232,7 +289,7 @@ void	ft_handler_dollar(t_list **tmp, t_command *cmd, char **env, char **join)
 	t = 0;
 	if ((*tmp)->next)
 		t = 1;
-	if (((*tmp)->str && (*tmp)->str[1] != '\0' && (*tmp)->str[1] != '0')
+	if (((*tmp)->str && (*tmp)->str[1] != '\0' && (*tmp)->str[1] != '0' && (*tmp)->str[1] != '?')
 		|| (t && (*tmp)->next->type == double_quo))
 	{
 		tmps = (*tmp)->str;
@@ -242,13 +299,15 @@ void	ft_handler_dollar(t_list **tmp, t_command *cmd, char **env, char **join)
 	}
 	else if ((*tmp)->str[1] == '\0' && t && (*tmp)->next->type != double_quo)
 		*join = ft_strjoin_n(*join, (*tmp)->str);
+	else if ((*tmp)->str[1] == '?')
+		*join = ft_strjoin_n(*join, ft_itoa(g_status));
 	else if ((*tmp)->str[1] == '0')
 		*join = ft_strjoin_n(*join, "minishell");
 }
 
 int	fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
 {
-	if ((*tmp)->type == -1 && !cherche_symbol((*tmp)->str[0], " t\n\v\f\r"))
+	if ((*tmp)->type == -1 && !cherche_symbol((*tmp)->str[0], " \t\n\v\f\r"))
 		*join = ft_strjoin_n(*join, (*tmp)->str);
 	else if ((*tmp)->type == single_quo)
 	{
@@ -264,7 +323,7 @@ int	fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
 		ft_handler_dollar(tmp, cmd, env, join);
 	else if ((*tmp)->type == redirect_in || (*tmp)->type == redirect_out)
 		ft_lstadd_back1(&cmd->redirect, fill_riderect((*tmp)->str, tmp, env));
-	else if ((cherche_symbol((*tmp)->str[0], " t\n\v\f\r")
+	else if ((cherche_symbol((*tmp)->str[0], " \t\n\v\f\r")
 			|| (*tmp)->type == char_null) && *join)
 	{
 		cmd->cmd[(*j)++] = *join;
@@ -390,12 +449,9 @@ t_command	*ft_parser(t_list **head, char *line, char **env)
 		tmp = current;
 		current = ft_count_args(current, &nbr_args);
 		if (nbr_args)
-		{
-			cmd[i].num_of_args = nbr_args;
 			fill_cmd(cmd + i, env, nbr_args, tmp);
-		}
 	}
 	//printf("the count command %d\n",)
-	affich(count_commads(head),cmd);
+	//affich(count_commads(head),cmd);
 	return (cmd);
 }

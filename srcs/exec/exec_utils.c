@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:34:15 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/22 13:30:23 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/24 20:45:10 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 char    *get_path(char **envp,  t_command *data, int index)
 {
+    g_status = 0;
     char    **paths;
     char    *path;
     int     i;
@@ -48,8 +49,10 @@ void ft_command_not_found(char **paths, char *cmd)
     free(paths);
     ft_putstr_fd(cmd, 2);
     ft_putstr_fd(": command not found\n", 2);
-    // g_exit_value = 127;
-    exit(127);
+    puts("here");
+    g_status = 127;
+    printf("%d\n", g_status);
+    // exit(g_status);
     // i need to free the t_command to avoid leaks
     //exit(EXIT_FAILURE);
 }

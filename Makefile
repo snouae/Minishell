@@ -1,5 +1,5 @@
 CC=gcc
-FLAGS= 
+FLAGS= -g
 FILES= srcs/parsing/main.c srcs/parsing/tools.c srcs/parsing/ft_lexer.c \
 		srcs/parsing/check_syntax.c srcs/parsing/parser.c srcs/parsing/ft_split.c \
 		srcs/parsing/expander.c srcs/parsing/ft_riderct.c \
@@ -14,7 +14,7 @@ NAME= minishell
 INCLUDES=-I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 READLINE=-lreadline -L/goinfre/snouae/.brew/opt/readline/lib
 RM= rm -rf
-all: $(NAME) clean
+all: $(NAME) 
 
 $(NAME): $(OBJS) 
 	$(CC) $(FLAGS) $^ $(READLINE)  -o $(NAME)

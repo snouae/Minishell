@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 13:18:29 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/22 18:48:51 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/24 20:09:54 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	ft_strcmp(char *s1, char *s2)
 	}
 	return (s1[i] - s2[i]);
 }
+
 void handler(int sig)
 {
 	if (sig ==  SIGINT)
@@ -99,12 +100,13 @@ int main(int ac, char **av, char **envp)
         ft_free_env(&g_env);
         return (ft_error("minishell", NULL, strerror(ENOMEM)));
     }
+	//g_st = 0;
 	while(1)
 	{
 		test = 0;
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handler);
-		//rl_on_new_line();
+		rl_on_new_line();
 		//pause();
 		buffer = readline("\033[1mminishell$> \033[m");
 		 if (!buffer)
@@ -134,7 +136,7 @@ int main(int ac, char **av, char **envp)
 				continue ;
 			}
 			cmd = ft_parser(&head,buffer,g_env);
-			printf("the leng %d\n", cmd[0].num_cmds);
+			// printf("the leng %d\n", cmd[0].num_cmds);
 			open_files(cmd, cmd[0].num_cmds);
 			execute_root(cmd, g_env);
 		}

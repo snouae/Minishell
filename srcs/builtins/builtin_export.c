@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 11:54:41 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/22 10:29:17 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/24 21:09:03 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,51 @@
 static char **sort_env(char **env);
 static bool check_arg(char *argv);
 
+static char *skip_symbol(char *argv)
+{
+    int i;
+    int j;
+    char    *str;
+
+    //printf("%s\n",argv);
+    str = malloc(ft_strlen(argv));
+    i = 0;
+    j = 0;
+    while (argv[i] != '\0')
+    {
+        if (argv[i + 1] == '=' && cherche_symbol(argv[i],"+"))
+        {
+            i++;
+            continue;
+        }
+       // printf("%c\n",argv[i]);
+        str[j++] = argv[i];
+        i++;
+    }
+   
+    return (str);
+}
+
+static bool error_symbol(char *argv)
+{
+    int i;
+
+    i = 0;
+    while (argv[i] != '\0'  && argv[i] != '=')
+    {
+        if (cherche_symbol(argv[i],"!$%'()*+,-./:;<>?@[]^`{|}~"))
+            return (false);
+        i++;
+    }
+    return (true);
+}
+
 int builtin_export(int argc, char **argv)
 {
     int status;
     int  i;
+    char *new;
+    int test = 0;
 
     status = EXIT_SUCCESS;
     if (argc == 1)
@@ -28,13 +69,16 @@ int builtin_export(int argc, char **argv)
         i = 1;
         while (argv[i])
         {
-            if (check_arg(argv[i]) == false)
+            new  =  skip_symbol(argv[i]);
+            if (ft_strcmp(new, argv[i]))
+                test = 1;             
+            if (check_arg(new) == false || error_symbol(new) == false)
             {
                 ft_error("minishell", argv[i], "not a valid identifier\n");
                 status = EXIT_FAILURE;
             }
-            else if (ft_strchr(argv[i], '='))
-                status = put_the_var(argv[i]);
+            else if (ft_strchr(new, '='))
+                status = put_the_var(new, test);
             i++;
         }
     }

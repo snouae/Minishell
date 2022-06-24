@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 14:34:27 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/22 10:03:43 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/24 17:44:00 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,13 +133,13 @@ void	ft_mark_dollar(char *line, int *i, int type, t_list **head)
 
 	start = *i;
 	(*i)++;
-	if (line[*i + 1] <= '9' && line[*i + 1] >= '0')
+	if (line[*i] <= '9' && line[*i] >= '0')
 		ft_lstadd_back(head, ft_add(line, start, *i, type));
 	else
 	{
 		while (line[*i] != double_quo && line[*i] != ' ' && line[*i] != tab
 			&& line[*i] && line[*i] != dollar && search_token(line[*i]) == -1
-			&& !cherche_symbol(line[*i], "\t!%'()*+,-./:;<=>?@[]^`{|}~"))
+			&& !cherche_symbol(line[*i], "\t!%'()*+,-./:;<=>@[]^`{|}~"))
 			(*i)++;
 		(*i)--;
 		ft_lstadd_back(head, ft_add(line, start, *i, type));

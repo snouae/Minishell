@@ -6,7 +6,7 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:15:39 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/15 11:42:31 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/23 19:41:39 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int builtin_check(char  *str)
     
     i = 0;
     is_builtin = 0;
-   // printf("---/%s\n",str);
     if (!str || !ft_strcmp(str, "exit"))
         is_builtin = -1;
     while (g_builtins[i].name != NULL)

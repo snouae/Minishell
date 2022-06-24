@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:37:52 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/17 01:56:18 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/24 18:20:13 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ long long	ft_atoi_exit(const char *str, int i, int *status_error)
 	neg = 1;
 	sum = 0;
 	j = 0;
-	if (str[i] && (str[i] == '-' || str[i] == '+'))
+    if (!str)
+        return (0);
+	if ((str[i] == '-' || str[i] == '+'))
 		if (str[i++] == '-')
 			neg *= -1;
 	while (str[i] && (ft_isspace(str[i]) || str[i] == '0'))
@@ -79,11 +81,11 @@ static void    exit_numeric_error(char *arg)
 {
     ft_putstr_fd("minishell: exit: ", 2);
     ft_putstr_fd(arg, 2);
-    ft_putstr_fd(": numeric argument required", 2);
+    ft_putstr_fd(": numeric argument required\n", 2);
     g_status = 2;
 }
 
-static void    check_numeric(char *arg)
+static void    check_numeric(char *arg, int *rtn_numeric)
 {
     int i;
 
@@ -96,7 +98,11 @@ static void    check_numeric(char *arg)
 			&& arg[i] != '\v' && arg[i] != ' ')
 		{
 			if (arg[i] < 48 || arg[i] > 57)
+            {
 				exit_numeric_error(arg);
+                *rtn_numeric = 1;
+                break;
+            }
 		}
 		i++;
 	}
@@ -107,9 +113,11 @@ int builtin_exit(int argc, char **argv)
     int         i;
     long long   rtn_atoi;
     int         status_error;
+    int         rtn_numeric;
     
     
     g_status = 0;
+    rtn_numeric = 0;
     status_error = 0;
     i = 1;
     if (argc == 1)
@@ -118,7 +126,7 @@ int builtin_exit(int argc, char **argv)
         exit (0);
     }
     if (argv[1] != NULL)
-        check_numeric(argv[1]);
+        check_numeric(argv[1], &rtn_numeric);
     while (argv[i])
         i++;
     if (i > 2)
@@ -133,8 +141,10 @@ int builtin_exit(int argc, char **argv)
             exit_numeric_error(argv[1]);
         g_status = rtn_atoi % 256;
     }
-    printf("%d\n", g_status);
-    ft_putstr_fd("exit\n", STDERR_FILENO);
-    exit(g_status);
+    if (status_error != 1 && rtn_numeric == 1)
+    {
+        ft_putstr_fd("exit\n", STDERR_FILENO);
+        exit(g_status);
+    }
     return (0);
 }

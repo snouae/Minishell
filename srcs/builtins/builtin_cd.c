@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 13:25:11 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/20 17:02:21 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/24 21:02:26 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,14 @@ static int update_pwd(void)
     char    path[MAX_BUF];
     if (get_value("PWD"))
     {
-        if (set_the_env("OLDPWD", get_value("PWD")) == ERROR)
+         if (set_the_env("OLDPWD", get_value("PWD")) == ERROR)
             return (ERROR);
     }
     else
         unset_the_var("OLDPWD");
     if (getcwd(path, MAX_BUF) == NULL)
     {
-        ft_error("minishell", "cd", strerror(ENOMEM));
+        ft_error("minishell", "cd: ", "error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
         return (ERROR);
     }
     if (set_the_env("PWD", path) == ERROR)

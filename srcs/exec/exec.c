@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 11:14:44 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/22 17:43:00 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/24 21:06:45 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void    execute_root(t_command *data, char **envp)
     i = 0;
     while (i < data[0].num_cmds)
     {
-        data[i].is_builtin_in = builtin_check(data[i].cmd[0]);
+        //if (data[i].redirect == NULL)
+            data[i].is_builtin_in = builtin_check(data[i].cmd[0]);
         if (data[i].next)
             pipe(data[i].next);
         ft_save_io(fd);
@@ -65,41 +66,55 @@ void    execute_root(t_command *data, char **envp)
             dup2(data[i].next[1], STDOUT_FILENO);
             close(data[i].next[1]);
         }
-        if (data[i].is_builtin_in)
+        if (data[i].redirect)
+        {
+            while (data[i].redirect->next)
+                data[i].redirect = data[i].redirect->next;
+            // pipe(data[i].redirect->redirect_fd);
+            if (data[i].redirect->type == IN || data[i].redirect->type == HEREDOC)
+            {
+                dup2(data[i].redirect->fd, STDIN_FILENO);
+                close(data[i].redirect->fd);
+            }
+            if (data[i].redirect->type == OUT || data[i].redirect->type == APPEND || 
+                data[i].redirect->type == HEREDOC)
+            {
+                dup2(data[i].redirect->fd, STDOUT_FILENO);
+                close(data[i].redirect->fd);
+            }
+        }
+        if (data[i].is_builtin_in  && data[i].redirect == NULL)
         {
             builtin_root(data[i++].cmd);
             ft_reset_io(fd);
-            // if (i == data[0].num_cmds - 1)
-            //     waitpid(pid, &status, 0);
-            // while (1)
-            // {
-            //     if (waitpid(-1, 0, 0) == -1)
-            //         break;
-            // }
             continue;
         }
+        // path = get_path(envp, data, i);
+        // if (path != NULL)
             pid = fork();
-            if (pid == 0)
+        if (pid == 0)
+        {
+            if (data[i].prev)
+                close(data[i].prev[1]);
+            if (data[i].next)
+                close(data[i].next[0]);
+            if (!ft_strncmp(data[i].cmd[0], "./", 2))
             {
-                if (data[i].prev)
-                    close(data[i].prev[1]);
-                if (data[i].next)
-                    close(data[i].next[0]);
-                path = get_path(envp, data, i);
-                rtn_execve = execve(path, data[i].cmd, envp);
-                exit(126);
+                rtn_execve = execve(data[i].cmd[0], data[i].cmd, envp);
+                if (rtn_execve == -1)
+                    ft_error("minishell", data[i].cmd[0], ": No such file or directory\n");
             }
-            ft_reset_io(fd);
-            // if (i == data[0].num_cmds - 1)
-            //     waitpid(pid, &status, 0);
-            // while (1)
-            // {
-            //     if (waitpid(-1, 0, 0) == -1)
-            //         break;
-            // }
+            else
+            {
+                 path = get_path(envp, data, i);
+                rtn_execve = execve(path, data[i].cmd, envp);
+            }
+            exit(g_status);
+        }
+        ft_reset_io(fd);
         i++;
-    } 
-     while (1)
+    }   
+    while (1)
     {
         if (waitpid(-1, 0, 0) == -1)
             break;

@@ -6,7 +6,7 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 17:01:28 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/22 10:44:56 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/23 22:02:31 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int unset_the_var(char  *name)
     return (0);
 }
 
-int put_the_var(char *str)
+int put_the_var(char *str, int test)
 {
     // bach i7tli var there are two cases:
     // 1- the var already exists in env
@@ -42,7 +42,7 @@ int put_the_var(char *str)
     if (new_var == NULL)
         return (ft_error("minishell", NULL, strerror(ENOMEM)));
     old_var = search_env(str);
-    status = replace_str_env(&g_env, old_var, new_var);
+    status = replace_str_env(&g_env, old_var, new_var, test);
     if (status == ERROR)
     {
         status = add_to_env(&g_env, new_var);
@@ -81,7 +81,7 @@ int set_the_env(char *name, char *value)
     var = ft_strjoin(var, value);
     if (var == NULL)
         return (ft_error("minishell", NULL, strerror(ENOMEM)));
-    status = put_the_var(var);
+    status = put_the_var(var, 0);
     free(var);
     return (status);
 } 
