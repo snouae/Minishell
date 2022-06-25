@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 14:52:59 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/24 20:35:01 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/25 21:46:44 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,14 @@ char	*check(char *str, char **env, t_list **tmp, int *test)
 	if ((*tmp)->next)
 	{
 		if ((*tmp)->next->str[0] == dollar)
-			new = join_dollar(tmp, test, env, str);
+		{
+			new = join_dollar(tmp, test, env, str);	
+			if(new[0] == '\0')
+			{
+				printf("minishell: %s: ambiguous redirect\n", (*tmp)->next->str);
+				st_err = 1;
+			}
+		}
 		else if ((*tmp)->next->str[0] == double_quo)
 		{
 			(*tmp)->next->str = remove_double_quote((*tmp)->next->str, env);

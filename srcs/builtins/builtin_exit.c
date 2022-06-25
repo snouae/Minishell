@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:37:52 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/24 18:20:13 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:45:06 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,14 @@ long long	ft_atoi_exit(const char *str, int i, int *status_error)
 	while (str[i] >= '0' && str[i] <= '9' && ++j)
 	{
 		sum = (sum * 10) + (str[i] - 48);
-		if (((i == 18 && neg == 1) && (str[i] > '7' && str[i] <= '9'))
-			|| ((i == 19 && neg == -1) && (str[i] == '9')))
+		if (sum > INT_MAX || sum < INT_MIN)
 			*status_error = 1;
 		i++;
 	}
 	while (str[i++])
 		j++;
-	if ((j > 19 && neg == 1) || (j > 20 && neg == -1))
-		*status_error = 1;
+	// if ((j > 19 && neg == 1) || (j > 20 && neg == -1))
+	// 	*status_error = 1;
 	return (sum * neg);
 }
 
@@ -82,7 +81,8 @@ static void    exit_numeric_error(char *arg)
     ft_putstr_fd("minishell: exit: ", 2);
     ft_putstr_fd(arg, 2);
     ft_putstr_fd(": numeric argument required\n", 2);
-    g_status = 2;
+    g_status = 255;
+    exit (g_status);
 }
 
 static void    check_numeric(char *arg, int *rtn_numeric)
@@ -141,10 +141,9 @@ int builtin_exit(int argc, char **argv)
             exit_numeric_error(argv[1]);
         g_status = rtn_atoi % 256;
     }
-    if (status_error != 1 && rtn_numeric == 1)
-    {
+    if (status_error != 1 || rtn_numeric == 1)
         ft_putstr_fd("exit\n", STDERR_FILENO);
-        exit(g_status);
-    }
+    exit(g_status);
+    //puts("her");
     return (0);
 }

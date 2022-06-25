@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 13:18:29 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/24 20:09:54 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/25 21:51:18 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void handler(int sig)
         rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		g_status = 1;
 	}
 }
 
@@ -104,6 +105,7 @@ int main(int ac, char **av, char **envp)
 	while(1)
 	{
 		test = 0;
+		st_err = 0;
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handler);
 		rl_on_new_line();
@@ -118,11 +120,6 @@ int main(int ac, char **av, char **envp)
 			free(buffer);
 			continue;
 		}
-		if (!ft_strcmp(buffer, "exit"))
-		{
-			free (buffer);
-			return (write(2, "exit\n", 5), 0);
-		}
 		if (ft_strlen(buffer))
 		{
 			add_history (buffer);
@@ -136,8 +133,11 @@ int main(int ac, char **av, char **envp)
 				continue ;
 			}
 			cmd = ft_parser(&head,buffer,g_env);
-			// printf("the leng %d\n", cmd[0].num_cmds);
+			if (st_err)
+				continue ;
 			open_files(cmd, cmd[0].num_cmds);
+			if (st_err)
+				continue ;
 			execute_root(cmd, g_env);
 		}
 		// if(!test)

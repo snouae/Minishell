@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 11:14:44 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/24 21:06:45 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/25 18:06:44 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void    execute_root(t_command *data, char **envp)
     i = 0;
     while (i < data[0].num_cmds)
     {
-        //if (data[i].redirect == NULL)
+        //if (data[i].redirect == NULL
             data[i].is_builtin_in = builtin_check(data[i].cmd[0]);
         if (data[i].next)
             pipe(data[i].next);
@@ -85,15 +85,19 @@ void    execute_root(t_command *data, char **envp)
         }
         if (data[i].is_builtin_in  && data[i].redirect == NULL)
         {
-            builtin_root(data[i++].cmd);
+            g_status = builtin_root(data[i++].cmd);
             ft_reset_io(fd);
             continue;
         }
         // path = get_path(envp, data, i);
         // if (path != NULL)
-            pid = fork();
+        pid = fork();
+        
+       signal(SIGINT, SIG_IGN);
         if (pid == 0)
         {
+		signal(SIGINT, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
             if (data[i].prev)
                 close(data[i].prev[1]);
             if (data[i].next)
@@ -102,21 +106,37 @@ void    execute_root(t_command *data, char **envp)
             {
                 rtn_execve = execve(data[i].cmd[0], data[i].cmd, envp);
                 if (rtn_execve == -1)
-                    ft_error("minishell", data[i].cmd[0], ": No such file or directory\n");
+                {
+                    //ft_error("minishell", data[i].cmd[0], ": No such file or directory\n");
+                    perror("execve");
+                    //g_status = 127;
+                }
             }
             else
             {
-                 path = get_path(envp, data, i);
+                path = get_path(envp, data, i);
                 rtn_execve = execve(path, data[i].cmd, envp);
             }
             exit(g_status);
+            
         }
         ft_reset_io(fd);
         i++;
-    }   
+    }
     while (1)
     {
-        if (waitpid(-1, 0, 0) == -1)
+        if (waitpid(-1, &g_status, 0) == -1)
             break;
     }
+    if (g_status == 3)
+    {
+        printf("Quit: 3\n");
+        g_status = 131;
+    }
+    else if(g_status == 2)
+        g_status = 130;
+    else if (g_status == 126 || g_status == 127)
+        return ;
+    else
+        g_status = WEXITSTATUS(g_status); 
 }

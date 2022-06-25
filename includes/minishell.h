@@ -12,9 +12,10 @@
 #include <fcntl.h>
 #include <stdbool.h>
 #include <errno.h>
+#include <limits.h>
 
 # define MAX_BUF 200
-# define ERROR	-1
+# define ERROR	256
 enum tokens
 {
     pipe_token = '|',
@@ -39,6 +40,7 @@ struct s_builtins
 my global variables
 */
 char	                **g_env;
+int                     st_err;
 // pid_t				g_pid;
 // int					g_error;
 int						g_status;

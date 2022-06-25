@@ -27,6 +27,7 @@ void open_files(t_command *cmd, int leng)
                 {
                     //printf("minishell: ");
                     perror("minishell: ");
+                    st_err = 1;
                 }
                 head = head->next;
             }

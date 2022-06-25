@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 14:34:27 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/24 17:44:00 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/25 18:49:29 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,6 @@ t_list	*ft_lexer(char *line, char **env)
 		i++;
 	}
 	ft_mark(line, &i, char_null, &head);
-	affich_token(&head);
+	//affich_token(&head);
 	return (head);
 }
