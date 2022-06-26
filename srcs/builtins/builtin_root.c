@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_root.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:15:39 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/23 19:41:39 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/26 14:27:09 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ int builtin_check(char  *str)
     
     i = 0;
     is_builtin = 0;
-    if (!str || !ft_strcmp(str, "exit"))
+    if(!str)
+        str = ft_strdup("");
+    if (!ft_strcmp(str, "exit"))
         is_builtin = -1;
     while (g_builtins[i].name != NULL)
     {

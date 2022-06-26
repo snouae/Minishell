@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 11:14:44 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/25 18:06:44 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/26 15:49:59 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,15 @@ void    execute_root(t_command *data, char **envp)
                 rtn_execve = execve(data[i].cmd[0], data[i].cmd, envp);
                 if (rtn_execve == -1)
                 {
+                    if (errno == 13) 
+                        g_status = 126;
+                    else
+                        g_status = 127;
                     //ft_error("minishell", data[i].cmd[0], ": No such file or directory\n");
-                    perror("execve");
                     //g_status = 127;
+                    ft_putstr_fd("minishell: ", 2);
+                    ft_putstr_fd(data[i].cmd[0], 2);   
+                    perror("");
                 }
             }
             else

@@ -6,11 +6,12 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:34:15 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/24 20:45:10 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/26 16:53:10 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <dirent.h>
 
 char    *get_path(char **envp,  t_command *data, int index)
 {
@@ -19,23 +20,40 @@ char    *get_path(char **envp,  t_command *data, int index)
     char    *path;
     int     i;
     char    *part_path;
-
-    i = 0;
-    while (ft_strnstr(envp[i], "PATH", 4) == NULL)
-        i++;
-    paths = ft_split(envp[i] + 5, ':');
-    i = 0;
-    while (paths[i])
+    if(data[index].cmd[0][0] == '/')
     {
-        part_path = ft_strjoin(paths[i], "/");
-        path = ft_strjoin(part_path, data[index].cmd[0]);
-        free(part_path);
-        if (access(path, F_OK) == 0)
-            return (path);
-        free(path);
-        i++;
+        if(opendir(data[index].cmd[0]) != NULL)
+        {
+            ft_error("minishell", data[index].cmd[0], " is a directory\n");
+            g_status = 126;
+        }
+        else if (access(data[index].cmd[0], F_OK) == 0)
+            return (data[index].cmd[0]);
+        else if (access(data[index].cmd[0], F_OK) == -1)
+        {
+            ft_error("minishell", data[index].cmd[0], "No such file or directory\n");
+            g_status = 127;
+        }
     }
-    ft_command_not_found(paths, data[index].cmd[0]);
+    else
+    {
+        i = 0;
+        while (ft_strnstr(envp[i], "PATH", 4) == NULL)
+        i++;
+        paths = ft_split(envp[i] + 5, ':');
+        i = 0;
+        while (paths[i])
+        {
+            part_path = ft_strjoin(paths[i], "/");
+            path = ft_strjoin(part_path, data[index].cmd[0]);
+            free(part_path);
+            if (access(path, F_OK) == 0)
+                return (path);    
+            free(path);
+            i++;
+        }
+        ft_command_not_found(paths, data[index].cmd[0]);
+    }
     return (0);
 }
 
@@ -47,8 +65,8 @@ void ft_command_not_found(char **paths, char *cmd)
     while (paths[i++])
         free(paths[i]);
     free(paths);
-    ft_putstr_fd(cmd, 2);
-    ft_putstr_fd(": command not found\n", 2);
+    ft_putstr_fd(cmd, STDERR_FILENO);
+    ft_putstr_fd(": command not found\n", STDERR_FILENO);
     puts("here");
     g_status = 127;
     printf("%d\n", g_status);

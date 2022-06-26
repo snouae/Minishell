@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 14:52:59 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/25 21:46:44 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/26 23:36:26 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ char	*join_dollar(t_list **tmp, int *test, char **env, char *str)
 	(*tmp)->next->str = ft_strdup_n(expander((*tmp)->next->str, env));
 	new = ft_strjoin_n(ft_strdup(str), (*tmp)->next->str);
 	(*tmp) = (*tmp)->next;
-	*test = 1;
+	*test = 1337;
 	return (new);
 }
 
@@ -201,14 +201,7 @@ char	*check(char *str, char **env, t_list **tmp, int *test)
 	if ((*tmp)->next)
 	{
 		if ((*tmp)->next->str[0] == dollar)
-		{
-			new = join_dollar(tmp, test, env, str);	
-			if(new[0] == '\0')
-			{
-				printf("minishell: %s: ambiguous redirect\n", (*tmp)->next->str);
-				st_err = 1;
-			}
-		}
+			new = join_dollar(tmp, test, env, str);
 		else if ((*tmp)->next->str[0] == double_quo)
 		{
 			(*tmp)->next->str = remove_double_quote((*tmp)->next->str, env);
@@ -237,6 +230,10 @@ t_redirection	*fill_riderect(char *str, t_list **tmp, char **env)
 	i = skip_redirect(str);
 	new = (t_redirection *)malloc(sizeof(t_redirection));
 	new->file = check(str + i, env, tmp, &test);
+	if(test == 1337 && new->file[0] == '\0')
+		new->status = 1;
+	else 
+		new->status = 0;
 	if (!test)
 		new->file = ft_strdup_n(str + i);
 	if (str[0] == '<' && str[1] == '<')
@@ -329,7 +326,9 @@ int	fill_arg(t_list **tmp, t_command *cmd, int *j, char **env, char **join)
 	else if ((*tmp)->type == dollar)
 		ft_handler_dollar(tmp, cmd, env, join);
 	else if ((*tmp)->type == redirect_in || (*tmp)->type == redirect_out)
+	{
 		ft_lstadd_back1(&cmd->redirect, fill_riderect((*tmp)->str, tmp, env));
+	}
 	else if ((cherche_symbol((*tmp)->str[0], " \t\n\v\f\r")
 			|| (*tmp)->type == char_null) && *join)
 	{

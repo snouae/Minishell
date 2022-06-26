@@ -16,18 +16,21 @@ void open_files(t_command *cmd, int leng)
                 if (head->type == IN)
                     head->fd = open(head->file, O_RDONLY);
                 else if (head->type == OUT)
-                {
                     head->fd = open(head->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-                }
                 else if (head->type == APPEND)
                     head->fd = open(head->file, O_WRONLY | O_APPEND | O_CREAT, 0664);
-                 if (head->type == HEREDOC)
+                 else if (head->type == HEREDOC)
                     head->fd = ft_heredoc(cmd, i, head->file);
-                if (head->fd < 0)
+                 if (head->fd < 0 && head->status)
+                 {
+                    ft_error("minishell","$"," ambiguous redirect\n");
+                    break ;
+                 }
+                else if (head->fd < 0 && !head->status)
                 {
-                    //printf("minishell: ");
                     perror("minishell: ");
-                    st_err = 1;
+                    g_status = 1;
+                    break ;
                 }
                 head = head->next;
             }

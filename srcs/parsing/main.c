@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 13:18:29 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/25 21:51:18 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/26 22:26:01 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,9 @@ int main(int ac, char **av, char **envp)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handler);
 		rl_on_new_line();
-		//pause();
 		buffer = readline("\033[1mminishell$> \033[m");
 		 if (!buffer)
-		 {
 			 break;
-		 }
 		if (line_empty(buffer))
 		{
 			free(buffer);
@@ -133,8 +130,6 @@ int main(int ac, char **av, char **envp)
 				continue ;
 			}
 			cmd = ft_parser(&head,buffer,g_env);
-			if (st_err)
-				continue ;
 			open_files(cmd, cmd[0].num_cmds);
 			if (st_err)
 				continue ;

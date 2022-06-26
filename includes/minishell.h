@@ -41,9 +41,9 @@ my global variables
 */
 char	                **g_env;
 int                     st_err;
+int						g_status;
 // pid_t				g_pid;
 // int					g_error;
-int						g_status;
 //int                     g_st;
 int                     g_exit_value;
 enum s_fileType
@@ -68,6 +68,7 @@ typedef struct s_redirection
     char *file;
     int type;
     int fd;
+    int status;
     int redirect_fd[2];
     struct s_redirection* next;
 } t_redirection;
@@ -142,7 +143,7 @@ int set_the_env(char *name, char *value);
 //=======================================
 //======= Execute utils ===== //
 char    *get_path(char **envp,  t_command *data, int index);
-void    ft_command_not_found(char **paths, char *cmd);
+void ft_command_not_found(char **paths, char *cmd);
 int     open_file(t_redirection *redirect);
 
 //====== execute function =====//
@@ -180,5 +181,6 @@ char	*ft_substr(char *s, unsigned int start, size_t len);
 
 //====== Error === //
 int ft_error(char *shell_name, char *s1, char *message);
+void    builtin_exit_2(char **argv, int rtn_numeric);
 
 #endif
