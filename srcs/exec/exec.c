@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 11:14:44 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/26 15:49:59 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/27 19:41:13 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void    execute_root(t_command *data, char **envp)
     int fd[2];
     char *path;
     int rtn_execve;
+    int check;
 
     rtn_execve = 0;
     status = 0;
@@ -51,6 +52,7 @@ void    execute_root(t_command *data, char **envp)
     i = 0;
     while (i < data[0].num_cmds)
     {
+    check = 0;
         //if (data[i].redirect == NULL
             data[i].is_builtin_in = builtin_check(data[i].cmd[0]);
         if (data[i].next)
@@ -67,30 +69,13 @@ void    execute_root(t_command *data, char **envp)
             close(data[i].next[1]);
         }
         if (data[i].redirect)
-        {
-            while (data[i].redirect->next)
-                data[i].redirect = data[i].redirect->next;
-            // pipe(data[i].redirect->redirect_fd);
-            if (data[i].redirect->type == IN || data[i].redirect->type == HEREDOC)
-            {
-                dup2(data[i].redirect->fd, STDIN_FILENO);
-                close(data[i].redirect->fd);
-            }
-            if (data[i].redirect->type == OUT || data[i].redirect->type == APPEND || 
-                data[i].redirect->type == HEREDOC)
-            {
-                dup2(data[i].redirect->fd, STDOUT_FILENO);
-                close(data[i].redirect->fd);
-            }
-        }
+            redirect_handler(data, i);
         if (data[i].is_builtin_in  && data[i].redirect == NULL)
         {
             g_status = builtin_root(data[i++].cmd);
             ft_reset_io(fd);
             continue;
         }
-        // path = get_path(envp, data, i);
-        // if (path != NULL)
         pid = fork();
         
        signal(SIGINT, SIG_IGN);
@@ -104,24 +89,29 @@ void    execute_root(t_command *data, char **envp)
                 close(data[i].next[0]);
             if (!ft_strncmp(data[i].cmd[0], "./", 2))
             {
-                rtn_execve = execve(data[i].cmd[0], data[i].cmd, envp);
+                    if(opendir(data[i].cmd[0]) != NULL)
+                    {
+                        check = 1;
+                        ft_error("minishell", data[i].cmd[0], " is a directory\n");
+                        g_status = 126;
+                    }
+                    path = data[i].cmd[0];
+            }
+            else
+                    path = get_path(envp, data, i);
+            if(check == 0)
+            {
+                rtn_execve = execve(path, data[i].cmd, envp);
                 if (rtn_execve == -1)
                 {
                     if (errno == 13) 
                         g_status = 126;
                     else
                         g_status = 127;
-                    //ft_error("minishell", data[i].cmd[0], ": No such file or directory\n");
-                    //g_status = 127;
                     ft_putstr_fd("minishell: ", 2);
                     ft_putstr_fd(data[i].cmd[0], 2);   
-                    perror("");
+                    perror(" ");
                 }
-            }
-            else
-            {
-                path = get_path(envp, data, i);
-                rtn_execve = execve(path, data[i].cmd, envp);
             }
             exit(g_status);
             

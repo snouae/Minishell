@@ -1,41 +1,6 @@
-make --dry-run --always-make --keep-going --print-directory
+make --dry-run --keep-going --print-directory
 make: Entering directory `/Users/snouae/Desktop/Minishell'
-gcc -g -c srcs/parsing/main.c -o srcs/parsing/main.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/parsing/tools.c -o srcs/parsing/tools.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/parsing/ft_lexer.c -o srcs/parsing/ft_lexer.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/parsing/check_syntax.c -o srcs/parsing/check_syntax.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/parsing/parser.c -o srcs/parsing/parser.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/parsing/ft_split.c -o srcs/parsing/ft_split.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/parsing/expander.c -o srcs/parsing/expander.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/parsing/ft_riderct.c -o srcs/parsing/ft_riderct.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/builtins/builtin_cd.c -o srcs/builtins/builtin_cd.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/builtins/builtin_echo.c -o srcs/builtins/builtin_echo.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/builtins/builtin_env.c -o srcs/builtins/builtin_env.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/builtins/builtin_exit.c -o srcs/builtins/builtin_exit.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/builtins/builtin_export.c -o srcs/builtins/builtin_export.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/builtins/builtin_pwd.c -o srcs/builtins/builtin_pwd.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/builtins/builtin_root.c -o srcs/builtins/builtin_root.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/builtins/builtin_unset.c -o srcs/builtins/builtin_unset.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/env/env_modify.c -o srcs/env/env_modify.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/env/env.c -o srcs/env/env.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/exec/exec_utils.c -o srcs/exec/exec_utils.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/exec/exec.c -o srcs/exec/exec.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/utils/builtin_utils.c -o srcs/utils/builtin_utils.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/utils/error.c -o srcs/utils/error.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_isalnum.c -o srcs/libft/ft_isalnum.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_memcpy.c -o srcs/libft/ft_memcpy.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_putchar_fd.c -o srcs/libft/ft_putchar_fd.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_putendl_fd.c -o srcs/libft/ft_putendl_fd.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_putstr_fd.c -o srcs/libft/ft_putstr_fd.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_split.c -o srcs/libft/ft_split.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_strchr.c -o srcs/libft/ft_strchr.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_substr.c -o srcs/libft/ft_substr.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_strjoin.c -o srcs/libft/ft_strjoin.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_strncmp.c -o srcs/libft/ft_strncmp.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_strnstr.c -o srcs/libft/ft_strnstr.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/libft/ft_strdup.c -o srcs/libft/ft_strdup.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/exec/save_io.c -o srcs/exec/save_io.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g -c srcs/exec/ft_heredoc.c -o srcs/exec/ft_heredoc.o -I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
-gcc -g srcs/parsing/main.o srcs/parsing/tools.o srcs/parsing/ft_lexer.o srcs/parsing/check_syntax.o srcs/parsing/parser.o srcs/parsing/ft_split.o srcs/parsing/expander.o srcs/parsing/ft_riderct.o srcs/builtins/builtin_cd.o srcs/builtins/builtin_echo.o srcs/builtins/builtin_env.o srcs/builtins/builtin_exit.o srcs/builtins/builtin_export.o srcs/builtins/builtin_pwd.o srcs/builtins/builtin_root.o srcs/builtins/builtin_unset.o srcs/env/env_modify.o srcs/env/env.o srcs/exec/exec_utils.o srcs/exec/exec.o srcs/utils/builtin_utils.o srcs/utils/error.o srcs/libft/ft_isalnum.o srcs/libft/ft_memcpy.o srcs/libft/ft_putchar_fd.o srcs/libft/ft_putendl_fd.o srcs/libft/ft_putstr_fd.o srcs/libft/ft_split.o srcs/libft/ft_strchr.o srcs/libft/ft_substr.o srcs/libft/ft_strjoin.o srcs/libft/ft_strncmp.o srcs/libft/ft_strnstr.o srcs/libft/ft_strdup.o srcs/exec/save_io.o srcs/exec/ft_heredoc.o -lreadline -L/goinfre/snouae/.brew/opt/readline/lib  -o minishell
+make: Nothing to be done for `all'.
+ 
 make: Leaving directory `/Users/snouae/Desktop/Minishell'
  

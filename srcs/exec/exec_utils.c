@@ -6,12 +6,12 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:34:15 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/26 16:53:10 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/27 20:02:06 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <dirent.h>
+
 
 char    *get_path(char **envp,  t_command *data, int index)
 {
@@ -20,6 +20,7 @@ char    *get_path(char **envp,  t_command *data, int index)
     char    *path;
     int     i;
     char    *part_path;
+
     if(data[index].cmd[0][0] == '/')
     {
         if(opendir(data[index].cmd[0]) != NULL)
@@ -39,7 +40,12 @@ char    *get_path(char **envp,  t_command *data, int index)
     {
         i = 0;
         while (ft_strnstr(envp[i], "PATH", 4) == NULL)
-        i++;
+        {
+            if (ft_strnstr(envp[i], "PATH", 4) == NULL && envp[i + 1] == NULL)
+                ft_error("minishell", data[index].cmd[0],
+                 ": No such file or directory\n");
+            i++;
+        }
         paths = ft_split(envp[i] + 5, ':');
         i = 0;
         while (paths[i])
@@ -67,9 +73,9 @@ void ft_command_not_found(char **paths, char *cmd)
     free(paths);
     ft_putstr_fd(cmd, STDERR_FILENO);
     ft_putstr_fd(": command not found\n", STDERR_FILENO);
-    puts("here");
+    //puts("here");
     g_status = 127;
-    printf("%d\n", g_status);
+    //printf("%d\n", g_status);
     // exit(g_status);
     // i need to free the t_command to avoid leaks
     //exit(EXIT_FAILURE);

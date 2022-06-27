@@ -26,10 +26,15 @@ void open_files(t_command *cmd, int leng)
                     ft_error("minishell","$"," ambiguous redirect\n");
                     break ;
                  }
-                else if (head->fd < 0 && !head->status)
+                else if (head->fd < 0 && !head->status && head->type != HEREDOC)
                 {
                     perror("minishell: ");
                     g_status = 1;
+                    break ;
+                }
+                else if (head->fd < 0 && head->type == HEREDOC)
+                {
+                    st_err = 1;
                     break ;
                 }
                 head = head->next;

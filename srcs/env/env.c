@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 10:50:41 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/22 10:45:21 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/27 19:34:29 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int env_init(char **env)
-{
-    int i;
-    
-    i = 0;
-    while (env[i])
-    {
-        i++;
-    }
-    if (i == 0)
-        return (0);
-    g_env = (char **)malloc((i + 1) * sizeof(char *));
-    if (!g_env)
-            printf("g_env is empty\n");
-    i = 0;
-    while (env[i])
-    {
-        g_env[i] = ft_strdup(env[i]);
-        if (!g_env[i])
-        {
-            ft_free_env(&g_env);
-            return (ft_error("minishell", NULL, strerror(ENOMEM)));
-        }
-        i++;
-    }
-    g_env[i] = NULL;
-    return (0);
-}
 
 char    *get_value(char *name)
 {

@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 13:18:29 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/26 22:26:01 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/27 13:24:20 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int main(int ac, char **av, char **envp)
 		signal(SIGINT, handler);
 		rl_on_new_line();
 		buffer = readline("\033[1mminishell$> \033[m");
-		 if (!buffer)
+		if (!buffer)
 			 break;
 		if (line_empty(buffer))
 		{

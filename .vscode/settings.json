@@ -2,6 +2,8 @@
     "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
         "sstream": "c",
-        "cstdio": "c"
-    }
+        "cstdio": "c",
+        "type_traits": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

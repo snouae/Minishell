@@ -12,16 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-/*int delimiter_check(char *line, char *eof)
-{
-    int delim_len;
-    
-    delim_len = ft_strlen(line);
-    if (!ft_strncmp(eof, line, delim_len) && line)
-            return (0);
-    return (1);
-*/
-
 char *handl_herdoc(char *str)
 {
     char    *new;
@@ -50,53 +40,68 @@ char *handl_herdoc(char *str)
     free(str);
     return (new);
 }
-
-
-/*int  multiple_heredoc(t_command *data, int i, int rtn_value)
+int line_empty_no_n(char *str)
 {
-    t_redirection   *head;
-    char            *line;
-    int             pipe_heredoc[2];
-    
-    head = data[i].redirect;
-    if (pipe(pipe_heredoc));
-        return (1)
-}*/
+	int i = -1;
 
+	while (str[++i])
+		if (str[i] == '\t'&& str[i] == '\v' && str[i] == '\f' 
+        && str[i] == ' ' && str[i] == '\r' )
+			return (0);
+	return (1);
+}
 int    ft_heredoc(t_command *data, int index, char *eof)
 {
     char    *line;
     int     rtn_value;
     int     pipe_heredoc[2];
+    int     pid;
+    int     status;
 
     if (pipe(pipe_heredoc) != 0)
         return (rtn_value);
-    rtn_value = pipe_heredoc[0];
-    line  = ft_strdup("");
-    while (ft_strcmp(eof, line))
+    pid = fork();
+    if (pid < 0)
     {
-        
-        line = readline("> ");
-        if (line == NULL)
-            break;
-        if (!ft_strcmp(eof, line))
-            break;
-        if (line_empty(line))
-        {
+        printf("mistaken code\n");
+        return (-1);
+    }
+   signal(SIGINT, SIG_IGN);
+    if(pid == 0)
+    {
+        signal(SIGINT, SIG_DFL);
+        rtn_value = pipe_heredoc[0];
+        line  = ft_strdup("");
+        while (ft_strcmp(eof, line))
+        { 
+            line = readline("> ");
+            if (line == NULL)
+                break;
+            if (!ft_strcmp(eof, line))
+                break;
+            if (!line_empty_no_n(line))
+            {
+                puts("heeeeeeeeere");
+                free(line);
+                write(pipe_heredoc[1], "\n", 1);
+                continue;
+            }
+            else if (ft_strlen(line))
+            {
+                line = handl_herdoc(line);
+                write(pipe_heredoc[1], line, ft_strlen(line));
+                write(pipe_heredoc[1], "\n", 1);
+            }
             free(line);
-            write(pipe_heredoc[1], "\n", 1);
-            continue;
-        }
-        if (ft_strlen(line))
-        {
-            line = handl_herdoc(line);
-            write(pipe_heredoc[1], line, ft_strlen(line));
-            write(pipe_heredoc[1], "\n", 1);
-        }
-        // close(pipe_heredoc[0]);
-        free(line);
-    }    //else 
+        } 
+        exit (0);
+    }
     close(pipe_heredoc[1]);
-    //   rtn_value = multiple_heredoc(data, index, rtn_value);
-    return (rtn_value);
+    waitpid(-1, &status, 0);
+    if (status == 2)
+    {
+        g_status = 130;
+        return (-1);
+    }
+    return (pipe_heredoc[0]);
 }
