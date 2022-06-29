@@ -6,25 +6,34 @@
 /*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 09:50:51 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/25 17:07:21 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/29 13:37:13 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	builtin_pwd(int argc __attribute((unused)),
-		char **argv __attribute((unused)))
+	char **argv __attribute((unused)))
 {
-	char	buf[MAX_BUF];
+	int	i;
 
+	i = 0;
+	char buf[MAX_BUF];
 	if (getcwd(buf, sizeof(buf)))
 	{
 		ft_putendl_fd(buf, STDOUT_FILENO);
 		return (0);
 	}
-	else
+	else if (!getcwd(NULL, 0))
 	{
-		ft_error("minishell", "pwd", strerror(ENOMEM));
-		return (EXIT_FAILURE);
+		while (g_env[i])
+		{
+			if (!ft_strncmp(g_env[i], "PWD", 3))
+			{
+				printf("%s\n", g_env[i] + 4);
+			}
+			i++;
+		}
 	}
+	return (0);		
 }

@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 12:39:00 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/28 23:48:21 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 14:35:03 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	add_string_red(char **new, char **env, t_list **tmp, int *test)
 			*new = ft_strjoin_n(*new, (*tmp)->str);
 		else
 			ft_handler_dollar(tmp, env, new);
-		*test = 1;
+		//*test = 1;
 	}
 	else if ((cherche_symbol((*tmp)->str[0], " \t\n\v\f\r") || (*tmp)->type == 0
 			|| ((*tmp)->type == 60 || (*tmp)->type == 62) && new))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 13:25:11 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/25 15:55:14 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/29 15:38:15 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	builtin_cd(int argc, char **argv)
 	dir = get_the_print_working_dir(argc, argv);
 	if (dir == NULL)
 		return (EXIT_FAILURE);
+	
 	if (chdir(dir) == -1)
 	{
 		printf("minishell: cd: %s: No such file or directory\n", dir);
@@ -39,7 +40,7 @@ static	char	*get_the_print_working_dir(int argc, char **argv)
 	char	*dir;
 
 	dir = NULL;
-	if (argc == 1)
+	if (argc == 1 || ft_strcmp(argv[1], "~") == 0)
 	{
 		dir = get_value("HOME");
 		if (dir == NULL)
@@ -63,7 +64,9 @@ static	int	update_pwd(void)
 	if (get_value("PWD"))
 	{
 		if (set_the_env("OLDPWD", get_value("PWD")) == ERROR)
+		{
 			return (ERROR);
+		}
 	}
 	else
 		unset_the_var("OLDPWD");

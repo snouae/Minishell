@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 07:41:08 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/28 15:31:33 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 17:06:16 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,23 @@ int	add_to_env(char ***env, char *str)
 	char	**new_env;
 	int		i;
 
-	new_env = (char **)malloc((env_count(*env) + 1) * sizeof(char *));
+	new_env = (char **)malloc((env_count(*env) + 2) * sizeof(char *));
 	if (!new_env)
-		ft_error_malloc("minishell", NULL, strerror(ENOMEM));
+	{
+		ft_error("minishell", NULL, strerror(ENOMEM));
+		printf("\n");
+		return (0);
+	}
 	i = 0;
-	printf("the string %s\n",str);
-	while ((*env)[i])
+	while (*env && (*env)[i])
 	{
 		new_env[i] = (*env)[i];
 		i++;
 	}
 	new_env[i] = str;
 	new_env[i + 1] = NULL;
-	i = 0;
-	//free(*env);
-	//copy_env()
+	free(*env);
 	*env = new_env;
-	while((*env)[i])
-	{
-		printf("------%s\n",(*env)[i]);
-		i++;
-	}
-	//free(new_env);
 	return (0);
 }
 
@@ -73,7 +68,10 @@ int	remove_from_env(char *str)
 
 	new_env = malloc(env_count(g_env) * sizeof(char *));
 	if (new_env == NULL)
-		ft_error_malloc("minishell", NULL, strerror(ENOMEM));
+	{
+		ft_error("minishell", NULL, strerror(ENOMEM));
+		return (0);
+	}
 	i = 0;
 	j = 0;
 	while (g_env[i])
@@ -83,9 +81,9 @@ int	remove_from_env(char *str)
 		new_env[j++] = g_env[i++];
 	}
 	new_env[j] = NULL;
-	//free(g_env);
+	free(g_env);
+	free(str);
 	g_env = new_env;
-	//free(new_env);
 	return (0);
 }
 
@@ -100,28 +98,14 @@ int	replace_str_env(char ***env, char *old_str, char *new_str, int test)
 		i++;
 	if (ft_strcmp((*env)[i], old_str))
 		return (ERROR);
-	//free(old_str);
+	free(old_str);
 	if (test == 1)
 	{
-		new_str = ft_strchr_export(new_str, '=');
+		printf("%p\n",new_str);
 		(*env)[i] = ft_strjoin((*env)[i], new_str);
 	}
 	else
-		(*env)[i] = new_str;
+		(*env)[i] = ft_strdup(new_str);
+	free (new_str);
 	return (0);
-}
-
-void	ft_free_env(char ***env)
-{
-	// int	i;
-
-	// i = 0;
-	// while ((*env)[i] != NULL)
-	// {
-	// 	free((*env)[i]);
-	// 	(*env)[i] = NULL;
-	// 	i++;
-	// }
-	// free(*env);
-	// *env = NULL;
 }

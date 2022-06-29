@@ -83,6 +83,7 @@ typedef struct s_command
 	int     *prev;
 	int     *next;
 	int     is_builtin_in;
+	int		exec;
 	struct s_redirection *redirect;
 }		t_command;
 
@@ -149,7 +150,7 @@ bool	error_symbol(char *argv);
 int     builtin_export(int argc, char **argv);
 char	*skip_symbol(char *argv);
  int	skip_redirect(char *str);
-//int		export_2(char **argv, char *new, int test, int i);
+int		export_2(char **argv, char *new, int test, int i);
 void    exported_vars(void);
 char	**sort_env(char **env);
 bool	check_arg(char *argv);

@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 13:18:29 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/29 01:35:49 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 19:30:31 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		test = 0;
 		st_err = 0;
+		rl_catch_signals = 0;
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, handler);
 		rl_on_new_line();
@@ -110,5 +111,6 @@ int	main(int ac, char **av, char **envp)
 		free_all(cmd);
 		free(buffer);
 	}
+	ft_free_env(&g_env);
 	return (0);
 }

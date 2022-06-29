@@ -6,28 +6,31 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 10:44:18 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/28 22:50:02 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 19:37:10 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	check_error_files(t_redirection *head)
+static int	check_error_files(t_redirection *head, t_command **cmd)
 {
 	if (head->fd < 0 && head->status && head->type != APPEND)
 	{
 		ft_error("minishell", "$", " ambiguous redirect\n");
+		(*cmd)->exec = 1;
 		return (1);
 	}
 	else if (head->fd < 0 && !head->status && head->type != HEREDOC)
 	{
 		perror("minishell: ");
+		(*cmd)->exec = 1;
 		g_status = 1;
 		return (1);
 	}
 	else if (head->fd < 0 && head->type == HEREDOC)
 	{
 		st_err = 1;
+		(*cmd)->exec = 1;
 		return (1);
 	}
 	return (0);
@@ -61,7 +64,7 @@ void	open_files(t_command *cmd, int leng)
 			while (head != NULL)
 			{
 				create_files(&head, cmd, i);
-				if (check_error_files(head))
+				if (check_error_files(head, &cmd))
 					break ;
 				head = head->next;
 			}

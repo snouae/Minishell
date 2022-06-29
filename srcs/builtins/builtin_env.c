@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 13:17:15 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/28 14:31:24 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 00:43:30 by aoumad           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@ int	builtin_env(int argc __attribute((unused)), char **argv)
 	int	i;
 
 	i = 0;
+	while (ft_strnstr(g_env[i], "PATH", 4) == NULL)
+	{
+		if (ft_strnstr(g_env[i], "PATH", 4) == NULL && g_env[i + 1] == NULL)
+		{
+			ft_error("minishell", argv[0],
+				": No such file or directory\n");
+			return (0);
+		}
+		i++;
+	}
 	if (g_env == NULL)
 	{
 		ft_error("minishell", "env", "environ not set");
@@ -25,7 +35,8 @@ int	builtin_env(int argc __attribute((unused)), char **argv)
 	i = 0;
 	while (g_env[i])
 	{
-		ft_putendl_fd(g_env[i], STDOUT_FILENO);
+		if (ft_strchr(g_env[i], '='))
+			ft_putendl_fd(g_env[i], STDOUT_FILENO);
 		i++;
 	}
 	return (0);

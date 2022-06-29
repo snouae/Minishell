@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 07:39:12 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/28 10:38:49 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 16:31:01 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	ft_error(char *shell_name, char *s1, char *message)
 		ft_putstr_fd(s1, 2);
 	if (message)
 		ft_putstr_fd(message, 2);
+	ft_putstr_fd("\n", 2);
 	return (ERROR);
 }
 
@@ -38,5 +39,19 @@ int	ft_error_malloc(char *shell_name, char *s1, char *message)
 	if (message)
 		ft_putstr_fd(message, 2);
 	ft_putstr_fd("\n", 2);
-	exit(1);
+	exit (1);
+}
+
+void	ft_free_env(char ***env)
+{
+	int	i;
+
+	i = 0;
+	while ((*env)[i] != NULL)
+	{
+		free((*env)[i]);
+		i++;
+	}
+	//free(*env);
+	//*env = NULL;
 }

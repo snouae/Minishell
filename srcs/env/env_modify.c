@@ -6,31 +6,31 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 17:01:28 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/28 15:34:40 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 17:09:08 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int unset_the_var(char  *name)
+int	unset_the_var(char *name)
 {
-	char    *env_var;
-		
-	env_var = search_env(name);
+	char	*env_var;
+
+	printf("1%p\n", env_var);
 	if (env_var == NULL)
 		return (ERROR);
 	remove_from_env(env_var);
 	return (0);
 }
 
-int put_the_var(char *str, int test)
+int	put_the_var(char *str, int test)
 {
-	char    *new_var;
-	char    *old_var;
-	int     status;
-	int i;
+	char	*new_var;
+	char	*old_var;
+	int		status;
+	int		i;
 
-	if (str == NULL || ft_strchr(str, '=') == NULL)
+	if (str == NULL)
 		return (ERROR);
 	new_var = ft_strdup(str);
 	if (new_var == NULL)
@@ -43,24 +43,26 @@ int put_the_var(char *str, int test)
 		if (status == ERROR)
 			return (ft_error("minishell", NULL, strerror(ENOMEM)));
 	}
+	free(str);
 	return (0);
 }
 
-int set_the_env(char *name, char *value)
+int	set_the_env(char *name, char *value)
 {
-	char    *var;
-	int     status;
-	
+	char	*var;
+	int		status;
+
 	if (name == NULL || value == NULL)
 		return (ERROR);
 	var = ft_strjoin(name, "=");
 	if (var == NULL)
 		return (ft_error("minishell", NULL, strerror(ENOMEM)));
+	free (var);
 	var = ft_strjoin(var, value);
 	if (var == NULL)
 		return (ft_error("minishell", NULL, strerror(ENOMEM)));
-	status = put_the_var(var, 0);
-	//free(var);
+	status = put_the_var(ft_strdup(var), 0);
+	free(var);
 	return (status);
 }
 
@@ -77,7 +79,7 @@ long long	ft_atoi_exit(const char *str, int i, int *status_error)
 	int			j;
 	long		neg;
 	long long	sum;
-	
+
 	neg = 1;
 	sum = 0;
 	j = 0;
@@ -90,7 +92,7 @@ long long	ft_atoi_exit(const char *str, int i, int *status_error)
 		i++;
 	while (str[i] >= '0' && str[i] <= '9' && ++j)
 	{
-		sum = (sum * 10) + (str[i] - 48);
+		sum += (sum * 10) + (str[i] - 48);
 		if (sum > INT_MAX || sum < INT_MIN)
 			*status_error = 1;
 		i++;
