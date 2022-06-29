@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 10:36:51 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/22 10:36:52 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/28 10:41:51 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ char	*fill_array(char *line, int start, int end)
 	j = start;
 	end++;
 	str = (char *)malloc(sizeof(char) * (end - start) + 1);
+	if (!str)
+		ft_error_malloc("minishell", NULL, strerror(ENOMEM));
 	while (j < end)
 	{
 		str[i] = line[j];

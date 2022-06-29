@@ -109,13 +109,31 @@ char *fill_array(char *line, int start, int end);
 int search_token(char token);
 void open_files(t_command *cmd, int leng);
 int cherche_symbol(char c, char *str);
-void deleteList(t_list** head_ref);
+void deletelist(t_list** head_ref);
 void free_all(t_command *cmd);
+void	deleteredir(t_redirection **head_ref);
 int    ft_heredoc(t_command *data, int index, char *eof);
 void    multi_heredoc_generator(t_command *data, int index, char *eof, int *pipe_heredoc);
 void    redirect_handler_heredoc(t_command *data, int i, int *pipe_heredoc);
 char	*check_dollar(int *j, char *str, char *new, char **env);
 int line_empty(char *str);
+char	*ft_itoa(int nb);
+void	ft_mark_redirect(char *line, int *i, int type, t_list **head);
+void	add_qoute(int type, int test, int *i, char *line);
+void	ft_mark_quote(char *line, int *i, int type, t_list **head);
+void	ft_mark_dollar(char *line, int *i, int type, t_list **head);
+void	ft_mark(char *line, int *i, int type, t_list **head);
+char	*remove_single_quote(char *str);
+char	*remove_double_quote(char *str, char **env);
+char *handl_herdoc(char *str);
+char	*check(char *str, char **env, t_list **tmp, int *test);
+t_redirection	*fill_riderect(char *str, t_list **tmp, char **env);
+void ft_lstadd_back1(t_redirection **lst, t_redirection *new);
+void	ft_handler_dollar(t_list **tmp, char **env, char **join);
+char	*check_dollar(int *j, char *str, char *new, char **env);
+int	check_cases(t_list **current);
+int	count_commads(t_list **head);
+
 /////////////////
 // ===== builtin functions ====== //
 int    builtin_root(char **argv);
@@ -130,7 +148,8 @@ void	builtin_exit_2(char **argv, int rtn_numeric);
 bool	error_symbol(char *argv);
 int     builtin_export(int argc, char **argv);
 char	*skip_symbol(char *argv);
-int		export_2(char **argv, char *new, int test, int i);
+ int	skip_redirect(char *str);
+//int		export_2(char **argv, char *new, int test, int i);
 void    exported_vars(void);
 char	**sort_env(char **env);
 bool	check_arg(char *argv);
@@ -198,5 +217,6 @@ char	*ft_substr(char *s, unsigned int start, size_t len);
 
 //====== Error === //
 int ft_error(char *shell_name, char *s1, char *message);
+int	ft_error_malloc(char *shell_name, char *s1, char *message);
 
 #endif

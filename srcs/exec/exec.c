@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 11:14:44 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/27 19:41:13 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/28 22:11:14 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,9 @@ void    execute_root(t_command *data, char **envp)
                         g_status = 126;
                     else
                         g_status = 127;
-                    ft_putstr_fd("minishell: ", 2);
-                    ft_putstr_fd(data[i].cmd[0], 2);   
-                    perror(" ");
+                    // ft_putstr_fd("minishell: ", 2);
+                    // ft_putstr_fd(data[i].cmd[0], 2);   
+                    // perror(" ");
                 }
             }
             exit(g_status);

@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 11:12:15 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/22 11:12:16 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 01:46:29 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ t_list	*ft_add(char *line, int start, int end, int type)
 	j = start;
 	new = (t_list *)malloc(sizeof(t_list));
 	if (!new)
-		return (NULL);
+		ft_error_malloc("minishell", NULL, strerror(ENOMEM));
 	end++;
 	new->str = (char *)malloc(sizeof(char) * (end - start) + 1);
+	if (!new->str)
+		ft_error_malloc("minishell", NULL, strerror(ENOMEM));
 	while (j < end)
 	{
 		new->str[i] = line[j];
@@ -85,4 +87,48 @@ char	*ft_strdup_n(char *src)
 	}
 	t[j] = '\0';
 	return (t);
+}
+
+int	len(long nb)
+{
+	int		len;
+
+	len = 0;
+	if (nb < 0)
+	{
+		nb = nb * -1;
+		len++;
+	}
+	while (nb > 0)
+	{
+		nb = nb / 10;
+		len++;
+	}
+	return (len);
+}
+
+char	*ft_itoa(int nb)
+{
+	char	*str;
+	long	n;
+	int		i;
+
+	n = nb;
+	i = len(n);
+	str = (char *)malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (NULL);
+	str[i--] = '\0';
+	if (n == 0)
+	{
+		str[0] = 48;
+		return (str);
+	}
+	while (n > 0)
+	{
+		str[i] = 48 + (n % 10);
+		n = n / 10;
+		i--;
+	}
+	return (str);
 }

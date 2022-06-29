@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 14:34:27 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/25 18:49:29 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/28 23:21:10 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,6 @@ int	search_token(char token)
 		return (-1);
 }
 
-void	deleteList(t_list **head)
-{
-	t_list	*current;
-	t_list	*next;
-
-	current = *head;
-	while (current)
-	{
-		next = current->next;
-		free(current->str);
-		free(current);
-		current = next;
-	}
-	*head = NULL;
-}
-
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*list;
@@ -69,97 +53,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	while (list->next)
 		list = list->next;
 	list->next = new;
-}
-
-void	ft_mark_redirect(char *line, int *i, int type, t_list **head)
-{
-	int	start;
-
-	start = *i;
-	while (search_token(line[*i]) == type)
-		(*i)++;
-	while (search_token(line[*i]) == ' ')
-		(*i)++;
-	while (search_token(line[*i]) == -1)
-		(*i)++;
-	(*i)--;
-	ft_lstadd_back(head, ft_add(line, start, *i, type));
-}
-
-void	add_qoute(int type, int test, int *i, char *line)
-{
-	int	k;
-
-	k = *i + 1;
-	if (test == 1)
-	{
-		while (search_token(line[k]))
-		{
-			if (search_token(line[k]) == type)
-			{
-				*i = k;
-				break ;
-			}
-			k++;
-		}
-	}
-}
-
-void	ft_mark_quote(char *line, int *i, int type, t_list **head)
-{
-	int	l;
-	int	test;
-	int	start;
-
-	start = *i;
-	test = 0;
-	l = *i + 1;
-	while (search_token(line[l]))
-	{
-		if (search_token(line[l]) == type)
-		{
-			test = 1;
-			break ;
-		}
-		l++;
-	}
-	add_qoute(type, test, i, line);
-	ft_lstadd_back(head, ft_add(line, start, *i, type));
-}
-
-void	ft_mark_dollar(char *line, int *i, int type, t_list **head)
-{
-	int	start;
-
-	start = *i;
-	(*i)++;
-	if (line[*i] <= '9' && line[*i] >= '0')
-		ft_lstadd_back(head, ft_add(line, start, *i, type));
-	else
-	{
-		while (line[*i] != double_quo && line[*i] != ' ' && line[*i] != tab
-			&& line[*i] && line[*i] != dollar && search_token(line[*i]) == -1
-			&& !cherche_symbol(line[*i], "\t!%'()*+,-./:;<=>@[]^`{|}~"))
-			(*i)++;
-		(*i)--;
-		ft_lstadd_back(head, ft_add(line, start, *i, type));
-	}
-}
-
-void	ft_mark(char *line, int *i, int type, t_list **head)
-{
-	int	start;
-
-	start = *i;
-	if (type != char_null)
-	{
-		while (search_token(line[*i]) == type)
-			(*i)++;
-		(*i)--;
-		ft_lstadd_back(head, ft_add(line, start, *i, type));
-	}
-	else
-		ft_lstadd_back(head, ft_add("\0", 0, 1, type));
 }
 
 void	affich_token(t_list **head)
@@ -211,6 +104,5 @@ t_list	*ft_lexer(char *line, char **env)
 		i++;
 	}
 	ft_mark(line, &i, char_null, &head);
-	//affich_token(&head);
 	return (head);
 }

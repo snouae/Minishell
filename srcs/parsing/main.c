@@ -6,103 +6,73 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 13:18:29 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/27 13:24:20 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/29 01:35:49 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-int	ft_strlen(char *s)
+char	**copy_env(char **envp)
 {
-	int	i;
+	int		i;
+	char	**rtn_env;
+	int		index;
 
-	if (!s)
-		return (0);
+	i = -1;
+	index = 0;
+	while (envp[++i])
+		index++;
+	rtn_env = malloc(sizeof(char *) * (index + 1));
+	if (!rtn_env)
+		ft_error_malloc("minishell", NULL, strerror(ENOMEM));
 	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-char    **copy_env(char **envp)
-{
-    int     i;
-    char    **rtn_env;
-    int     index;
-    
-    i = -1;
-    index = 0;
-    while (envp[++i])
-        index++;
-    rtn_env = malloc(sizeof(char *) * (index + 1));
-    i = 0;
-    while (i < index)
-    {
-        rtn_env[i] = ft_strdup(envp[i]);
-        i++;
-    }
-    rtn_env[i] = NULL;
-    return (rtn_env);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] != '\0' || s2[i] != '\0')
+	while (i < index)
 	{
-		if (s1[i] != s2[i])
-		{
-			return (s1[i] - s2[i]);
-		}
+		rtn_env[i] = ft_strdup(envp[i]);
 		i++;
 	}
-	return (s1[i] - s2[i]);
+	rtn_env[i] = NULL;
+	return (rtn_env);
 }
 
-void handler(int sig)
+void	handler(int sig)
 {
-	if (sig ==  SIGINT)
+	if (sig == SIGINT)
 	{
-	    printf("\n");
-        rl_on_new_line();
+		printf("\n");
+		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 		g_status = 1;
 	}
 }
 
-int line_empty(char *str)
+int	ft_check(t_list **head, char *line)
 {
-	int i = -1;
+	t_list	*current;
 
-	while (str[++i])
-		if (str[i] != '\t'&& str[i] != '\v' && str[i] != '\f' &&
-		str[i] != '\n' && str[i] != ' ' && str[i] != '\r' )
+	current = *head;
+	while (current != NULL)
+	{
+		if (!check_cases(&current))
 			return (0);
+		current = current->next;
+	}
 	return (1);
 }
-int main(int ac, char **av, char **envp)
-{
-	int test;
-	t_list *head;
-	char *buffer;
-	t_command *cmd;
 
+int	main(int ac, char **av, char **envp)
+{
+	int			test;
+	t_list		*head;
+	char		*buffer;
+	t_command	*cmd;
 
 	cmd = NULL;
 	(void)ac;
 	(void)av;
 	g_env = copy_env(envp);
-    if (!g_env)
-    {
-        ft_free_env(&g_env);
-        return (ft_error("minishell", NULL, strerror(ENOMEM)));
-    }
-	//g_st = 0;
-	while(1)
+	while (1)
 	{
 		test = 0;
 		st_err = 0;
@@ -111,34 +81,34 @@ int main(int ac, char **av, char **envp)
 		rl_on_new_line();
 		buffer = readline("\033[1mminishell$> \033[m");
 		if (!buffer)
-			 break;
+			break ;
 		if (line_empty(buffer))
 		{
 			free(buffer);
-			continue;
+			continue ;
 		}
 		if (ft_strlen(buffer))
 		{
 			add_history (buffer);
-			head = ft_lexer(buffer,envp);
-			if(!ft_check(&head,buffer))
+			head = ft_lexer(buffer, envp);
+			if (!ft_check(&head, buffer))
 			{
 				printf("minishell: syntax error\n");
 				free(buffer);
-				deleteList(&head);
+				deletelist(&head);
 				test = 1;
 				continue ;
 			}
-			cmd = ft_parser(&head,buffer,g_env);
+			cmd = ft_parser(&head, buffer, g_env);
 			open_files(cmd, cmd[0].num_cmds);
 			if (st_err)
 				continue ;
 			execute_root(cmd, g_env);
 		}
-		// if(!test)
-		// 	deleteList(&head);
-		// free_all(cmd);
-		// free(buffer);
-    }
-    return 0;
+		if (!test)
+			deletelist(&head);
+		free_all(cmd);
+		free(buffer);
+	}
+	return (0);
 }

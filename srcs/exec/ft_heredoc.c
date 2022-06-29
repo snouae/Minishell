@@ -24,11 +24,13 @@ char *handl_herdoc(char *str)
     new = NULL;
     leng = ft_strlen(str);
     tmp = (char *)malloc(sizeof(char) * 2);
+    if(!tmp)
+        ft_error_malloc("minishell", NULL, strerror(ENOMEM));
     tmp[1] = '\0';
     while (++j < leng)
     {
         if (str[j] == dollar
-            && !cherche_symbol(str[j + 1], "\t!$%'() *\"+,-./:;<=>?@[]^`{|}~"))
+            && !cherche_symbol(str[j + 1], "\t!$%'() *\"+,-./:;<=>@[]^`{|}~"))
             new = check_dollar(&j, str, new, g_env);
         else
         {
@@ -40,6 +42,7 @@ char *handl_herdoc(char *str)
     free(str);
     return (new);
 }
+
 int line_empty_no_n(char *str)
 {
 	int i = -1;

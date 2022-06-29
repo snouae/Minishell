@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 10:41:13 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/22 11:04:32 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/28 23:19:19 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,20 +115,6 @@ int	check_cases(t_list **current)
 	{
 		if (!check_red((*current)->str, (*current)->next))
 			return (0);
-	}
-	return (1);
-}
-
-int	ft_check(t_list **head, char *line)
-{
-	t_list	*current;
-
-	current = *head;
-	while (current != NULL)
-	{
-		if (!check_cases(&current))
-			return (0);
-		current = current->next;
 	}
 	return (1);
 }

@@ -1,6 +1,6 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory `/Users/snouae/Desktop/Minishell'
-make: Nothing to be done for `all'.
+gcc  srcs/parsing/main.o srcs/parsing/tools.o srcs/parsing/ft_lexer.o srcs/parsing/check_syntax.o srcs/parsing/parser.o srcs/parsing/ft_split.o srcs/parsing/expander.o srcs/parsing/ft_riderct.o srcs/parsing/ft_mark.o srcs/parsing/ft_free.o srcs/parsing/ft_quot.o srcs/parsing/ft_pars_redirect.o srcs/parsing/ft_dollar.o srcs/builtins/builtin_cd.o srcs/builtins/builtin_echo.o srcs/builtins/builtin_env.o srcs/builtins/builtin_exit.o srcs/builtins/builtin_export.o srcs/builtins/builtin_pwd.o srcs/builtins/builtin_root.o srcs/builtins/builtin_unset.o srcs/env/env_modify.o srcs/env/env.o srcs/exec/exec_utils.o srcs/exec/exec.o srcs/utils/builtin_utils.o srcs/utils/error.o srcs/libft/ft_isalnum.o srcs/libft/ft_memcpy.o srcs/libft/ft_putchar_fd.o srcs/libft/ft_putendl_fd.o srcs/libft/ft_putstr_fd.o srcs/libft/ft_split.o srcs/libft/ft_strchr.o srcs/libft/ft_substr.o srcs/libft/ft_strjoin.o srcs/libft/ft_strncmp.o srcs/libft/ft_strnstr.o srcs/libft/ft_strdup.o srcs/exec/save_io.o srcs/exec/ft_heredoc.o srcs/exec/ft_redirect.o -lreadline -L/goinfre/snouae/.brew/opt/readline/lib  -o minishell
  
 make: Leaving directory `/Users/snouae/Desktop/Minishell'
  
