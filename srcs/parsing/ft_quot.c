@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 12:34:10 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/29 00:23:18 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 06:27:20 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*remove_double_quote(char *str, char **env)
 	while (++j < leng - 1)
 	{
 		if (str[j] == dollar
-			&& !cherche_symbol(str[j + 1], "\t!$%'() *\"+,-./:;<=>?@[]^`{|}~"))
+			&& !cherche_symbol(str[j + 1], "\t!$%'() *\"+,-./:;<=>@[]^`{|}~"))
 			new = check_dollar(&j, str, new, env);
 		else
 			new = join_dollar(tmp, new, j, str);

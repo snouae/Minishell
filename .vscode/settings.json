@@ -3,7 +3,8 @@
     "files.associations": {
         "sstream": "c",
         "cstdio": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "bitset": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

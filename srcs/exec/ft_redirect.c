@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redirect.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoumad <abderazzakoumad@gmail.com>         +#+  +:+       +#+        */
+/*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 10:44:17 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/27 16:36:11 by aoumad           ###   ########.fr       */
+/*   Updated: 2022/06/30 08:41:44 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,28 @@ void	redirect_handler(t_command *data, int i)
 	int	index;
 	int	c;
 	int	n;
-
+	t_redirection *head;
+	
 	c = 0;
 	n = 0;
 	index = i;
 	read_handler(data, i, c, n);
-	while (data[i].redirect->next)
-		data[i].redirect = data[i].redirect->next;
-	if (data[i].redirect->type == IN)
+	head = data[i].redirect;
+	while (head->next)
+		head = head->next;
+	if (head->type == IN)
 	{
-		dup2(data[i].redirect->fd, STDIN_FILENO);
-		close(data[i].redirect->fd);
+		dup2(head->fd, STDIN_FILENO);
+		close(head->fd);
 	}
-	if (data[i].redirect->type == OUT || data[i].redirect->type == APPEND)
+	if (head->type == OUT || head->type == APPEND)
 	{
-		dup2(data[i].redirect->fd, STDOUT_FILENO);
-		close(data[i].redirect->fd);
+		dup2(head->fd, STDOUT_FILENO);
+		close(head->fd);
 	}
-	if (data[index].redirect->fd == HEREDOC)
+	if (head->fd == HEREDOC)
 	{
-		dup2(data[i].redirect->fd, STDOUT_FILENO);
-		close(data[i].redirect->fd);
+		dup2(head->fd, STDOUT_FILENO);
+		close(head->fd);
 	}
 }

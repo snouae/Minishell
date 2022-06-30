@@ -16,7 +16,7 @@ NAME= minishell
 INCLUDES=-I includes/minishell.h -I /goinfre/snouae/.brew/opt/readline/include
 READLINE=-lreadline -L/goinfre/snouae/.brew/opt/readline/lib
 RM= rm -rf
-all: $(NAME)
+all: $(NAME) clean
 
 $(NAME): $(OBJS) 
 	$(CC) $(FLAGS) $^ $(READLINE)  -o $(NAME)

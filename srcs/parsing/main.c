@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 13:18:29 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/29 19:30:31 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 14:17:03 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,18 @@ char	**copy_env(char **envp)
 	}
 	rtn_env[i] = NULL;
 	return (rtn_env);
+}
+
+int	skip_redirect(char *str)
+{
+	int	i;
+
+	i = 1;
+	if (str[i] == '>' || str[i] == '<')
+		i = 2;
+	while (cherche_symbol(str[i], " \t\n\v\f\r"))
+		i++;
+	return (i);
 }
 
 void	handler(int sig)
@@ -63,7 +75,6 @@ int	ft_check(t_list **head, char *line)
 
 int	main(int ac, char **av, char **envp)
 {
-	int			test;
 	t_list		*head;
 	char		*buffer;
 	t_command	*cmd;
@@ -74,7 +85,6 @@ int	main(int ac, char **av, char **envp)
 	g_env = copy_env(envp);
 	while (1)
 	{
-		test = 0;
 		st_err = 0;
 		rl_catch_signals = 0;
 		signal(SIGQUIT, SIG_IGN);
@@ -97,17 +107,20 @@ int	main(int ac, char **av, char **envp)
 				printf("minishell: syntax error\n");
 				free(buffer);
 				deletelist(&head);
-				test = 1;
 				continue ;
 			}
 			cmd = ft_parser(&head, buffer, g_env);
 			open_files(cmd, cmd[0].num_cmds);
 			if (st_err)
+			{
+				deletelist(&head);
+				free_all(cmd);
+				free(buffer);
 				continue ;
+			}
 			execute_root(cmd, g_env);
 		}
-		if (!test)
-			deletelist(&head);
+		deletelist(&head);
 		free_all(cmd);
 		free(buffer);
 	}

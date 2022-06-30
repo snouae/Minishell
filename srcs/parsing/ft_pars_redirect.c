@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 12:39:00 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/29 14:35:03 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 14:16:36 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,17 @@ void	ft_lstadd_back1(t_redirection **lst, t_redirection *new)
 	list->next = new;
 }
 
+void check_not_herdoc(char **new, char **env, t_list **tmp, int *test)
+{
+	if (*test == 11)
+		*new = ft_strjoin_n(*new, (*tmp)->str);
+	else
+	{
+		ft_handler_dollar(tmp, env, new);
+		*test = 1;
+	}
+}
+
 int	add_string_red(char **new, char **env, t_list **tmp, int *test)
 {
 	if ((*tmp)->type == -1 && !cherche_symbol((*tmp)->str[0], " \t\n\v\f\r"))
@@ -44,13 +55,7 @@ int	add_string_red(char **new, char **env, t_list **tmp, int *test)
 		*new = ft_strjoin_n(*new, (*tmp)->str);
 	}
 	else if ((*tmp)->type == dollar)
-	{
-		if (*test == 11)
-			*new = ft_strjoin_n(*new, (*tmp)->str);
-		else
-			ft_handler_dollar(tmp, env, new);
-		//*test = 1;
-	}
+		check_not_herdoc(new, env, tmp, test);
 	else if ((cherche_symbol((*tmp)->str[0], " \t\n\v\f\r") || (*tmp)->type == 0
 			|| ((*tmp)->type == 60 || (*tmp)->type == 62) && new))
 		return (1);
@@ -71,18 +76,6 @@ char	*check(char *str, char **env, t_list **tmp, int *test)
 		(*tmp) = (*tmp)->next;
 	}
 	return (new);
-}
-
-int	skip_redirect(char *str)
-{
-	int	i;
-
-	i = 1;
-	if (str[i] == '>' || str[i] == '<')
-		i = 2;
-	while (cherche_symbol(str[i], " \t\n\v\f\r"))
-		i++;
-	return (i);
 }
 
 t_redirection	*fill_riderect(char *str, t_list **tmp, char **env)

@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 15:24:31 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/29 19:04:30 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 15:04:47 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*handl_herdoc(char *str)
 	while (++j < leng)
 	{
 		if (str[j] == dollar
-			&& !cherche_symbol(str[j + 1], "\t!$%'() *\"+,-./:;<=>?@[]^`{|}~"))
+			&& !cherche_symbol(str[j + 1], "\t!$%'() *\"+,-./:;<=>@[]^`{|}~"))
 			new = check_dollar(&j, str, new, g_env);
 		else
 		{

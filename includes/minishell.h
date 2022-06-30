@@ -72,6 +72,7 @@ typedef struct s_redirection
     int type;
     int fd;
     int status;
+	int st_herdoc;
     int redirect_fd[2];
     struct s_redirection* next;
 } t_redirection;

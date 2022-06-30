@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 11:14:44 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/29 19:39:47 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 15:14:09 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,14 @@ void	execute_root(t_command *data, char **envp)
 	i = 0;
 	while (i < data[0].num_cmds)
 	{
-		if (data[i].exec == 0)
-	   {
-		check = 0;
 		data[i].is_builtin_in = builtin_check(data[i].cmd[0]);
 		if (data[i].next)
 			pipe(data[i].next);
+		if (data[i].exec == 0)
+	   {
 		ft_save_io(fd);
 		dup_io(data, i);
+		check = 0;
 		if (data[i].redirect)
 			redirect_handler(data, i);
 		if (data[i].is_builtin_in  && data[i].redirect == NULL)
@@ -110,13 +110,15 @@ void	execute_root(t_command *data, char **envp)
 				rtn_execve = execve(path, data[i].cmd, envp);
 				if (rtn_execve == -1)
 				{
-					if (errno == 13) 
+					if (errno == 13)
+					{
+						ft_putstr_fd("minishell: ", 2);
+						ft_putstr_fd(data[i].cmd[0], 2);   
+						perror(" ");
 						g_status = 126;
+					}
 					else
 						g_status = 127;
-					ft_putstr_fd("minishell: ", 2);
-					ft_putstr_fd(data[i].cmd[0], 2);   
-					perror(" ");
 				}
 			}
 			exit(g_status);
@@ -124,11 +126,24 @@ void	execute_root(t_command *data, char **envp)
 		}
 		ft_reset_io(fd);
 	   }
+	   else
+	   {
+		   if (data[i].prev)
+		   		close(data[i].prev[1]);
+			if (data[i].next)
+				close(data[i].next[1]);
+	   }
+		if (data[i].prev)
+		   	close(data[i].prev[1]);
+		if (data[i].next)
+			close(data[i].next[1]);
 		i++;
 	}
+	if (i == data[0].num_cmds)
+		waitpid(pid, &g_status, 0);
 	while (1)
 	{
-		if (waitpid(-1, &g_status, 0) == -1)
+		if (waitpid(-1, 0, 0) == -1)
 			break;
 	}
 	if (g_status == 3)

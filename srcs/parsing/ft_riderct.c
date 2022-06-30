@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 10:44:18 by snouae            #+#    #+#             */
-/*   Updated: 2022/06/29 19:37:10 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 09:04:09 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	check_error_files(t_redirection *head, t_command **cmd)
 {
 	if (head->fd < 0 && head->status && head->type != APPEND)
 	{
-		ft_error("minishell", "$", " ambiguous redirect\n");
+		ft_error("minishell", "$", " ambiguous redirect");
 		(*cmd)->exec = 1;
 		return (1);
 	}
