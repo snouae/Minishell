@@ -155,6 +155,7 @@ int		export_2(char **argv, char *new, int test, int i);
 void    exported_vars(void);
 char	**sort_env(char **env);
 bool	check_arg(char *argv);
+char	*join_to_env(char	*env);
 
 int     builtin_check(char  *str);
 int     builtin_pwd(int argc __attribute((unused)), 
@@ -197,6 +198,8 @@ int     env_count(char **env);
 int     add_to_env(char ***env, char *str);
 int     remove_from_env(char *str);
 void	ft_free_env(char ***env);
+char	*ft_strchr_export(const char *s, int c);
+bool	check_replace(char *old_str, char *new_str);
 
 
 //=========================================

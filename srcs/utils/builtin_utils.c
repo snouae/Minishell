@@ -6,13 +6,13 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 07:41:08 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/29 17:06:16 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 22:40:48 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static	char	*ft_strchr_export(const char *s, int c)
+char	*ft_strchr_export(const char *s, int c)
 {
 	while (*s)
 	{
@@ -98,14 +98,27 @@ int	replace_str_env(char ***env, char *old_str, char *new_str, int test)
 		i++;
 	if (ft_strcmp((*env)[i], old_str))
 		return (ERROR);
-	free(old_str);
 	if (test == 1)
 	{
-		printf("%p\n",new_str);
+		new_str = ft_strchr_export(new_str, '=');
 		(*env)[i] = ft_strjoin((*env)[i], new_str);
 	}
-	else
+	else if (check_replace(old_str, new_str) == true)
 		(*env)[i] = ft_strdup(new_str);
-	free (new_str);
+	else
+		return (0);
+	free(old_str);
+	//free (new_str);
 	return (0);
+}
+
+bool	check_replace(char *old_str, char *new_str)
+{
+	if (ft_strchr(old_str, '=') && ft_strchr(new_str, '='))
+		return (true);
+	else if (!ft_strchr(old_str, '=') && ft_strchr(new_str, '='))
+		return (true);
+	else if (ft_strchr(old_str, '=') && !ft_strchr(new_str, '='))
+		return (false);
+	return (true);
 }

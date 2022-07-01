@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/26 23:31:11 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/29 16:36:03 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 22:52:44 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**sort_env(char **env)
 
 	count = env_count(env);
 	i = 0;
-	while (i < count - 1)
+	while (i < count)
 	{
 		j = 0;
 		while (j < (count - 1))
@@ -57,7 +57,9 @@ void	exported_vars(void)
 {
 	char	**dup_env;
 	int		i;
-
+	int		count;
+	
+	count = env_count(g_env) + 1;
 	dup_env = (char **)malloc((env_count(g_env) + 1) * sizeof(char *));
 	if (dup_env == NULL)
 		return ;
@@ -75,8 +77,15 @@ void	exported_vars(void)
 	i = 0;
 	while (g_env[i])
 	{
-		ft_putstr_fd("declare -x \"", 1);
-		ft_putstr_fd(g_env[i], 1);
+		ft_putstr_fd("declare -x ", 1);
+		if (ft_strchr(g_env[i], '=') == NULL)
+		{
+			ft_putendl_fd(g_env[i], 1);
+			i++;
+			continue ;
+		}
+		dup_env[i] = join_to_env(g_env[i]);
+		ft_putstr_fd(dup_env[i], 1);
 		ft_putendl_fd("\"", 1);
 		i++;
 	}
@@ -87,4 +96,32 @@ void	exported_vars(void)
 		i++;
 	}
 	free(dup_env);
+}
+
+char	*join_to_env(char	*env)
+{
+	int	i;
+	char	*tmp;
+	char	*str;
+	int		count;
+	char	c;
+
+	i = 0;
+	c = '=';
+	count = ft_strlen(env);
+	while (i < count)
+	{
+		if (env[i] == (char )c)
+		{
+			i++;
+			break;
+		}
+		i++;
+	}
+	str = ft_substr(env, 0, i);
+	tmp = ft_strjoin(str, "\"");
+	free(str);
+	str = ft_strjoin(tmp, ft_substr(env, i, (count - i)));
+	free(tmp);
+	return (str);
 }

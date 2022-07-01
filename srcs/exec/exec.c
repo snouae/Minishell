@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 11:14:44 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/30 15:14:09 by snouae           ###   ########.fr       */
+/*   Updated: 2022/07/01 11:30:32 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,6 @@ void	execute_root(t_command *data, char **envp)
 			if (data[i].next)
 				close(data[i].next[1]);
 	   }
-		if (data[i].prev)
-		   	close(data[i].prev[1]);
-		if (data[i].next)
-			close(data[i].next[1]);
 		i++;
 	}
 	if (i == data[0].num_cmds)

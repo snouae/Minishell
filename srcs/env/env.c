@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 10:50:41 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/29 16:56:44 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 17:37:06 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*search_env(char *name)
 	i = 0;
 	while (g_env[i])
 	{
-		if (!ft_strncmp(name, g_env[i], len_name) && g_env[i][len_name] == '=')
+		if (!ft_strncmp(name, g_env[i], len_name))
 			return (g_env[i]);
 		i++;
 	}

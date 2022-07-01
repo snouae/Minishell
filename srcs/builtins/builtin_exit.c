@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 18:37:52 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/30 12:32:29 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 16:36:43 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ static long long    ft_atoi_exit11(const char *str, int i, int *status_error)
     if ((str[i] == '-' || str[i] == '+'))
         if (str[i++] == '-')
             neg *= -1;
-    while (str[i] && str[i] == '0')
+    while (str[i] && ( str[i] == '0'))
         i++;
     while (str[i] >= '0' && str[i] <= '9' && ++j)
     {

@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 17:01:28 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/29 17:09:08 by snouae           ###   ########.fr       */
+/*   Updated: 2022/06/30 17:26:16 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	unset_the_var(char *name)
 {
 	char	*env_var;
 
-	printf("1%p\n", env_var);
 	if (env_var == NULL)
 		return (ERROR);
 	remove_from_env(env_var);

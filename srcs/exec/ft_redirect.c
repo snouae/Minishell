@@ -6,7 +6,7 @@
 /*   By: snouae <snouae@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 10:44:17 by aoumad            #+#    #+#             */
-/*   Updated: 2022/06/30 08:41:44 by snouae           ###   ########.fr       */
+/*   Updated: 2022/07/01 11:20:05 by snouae           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	redirect_handler(t_command *data, int i)
 	int	c;
 	int	n;
 	t_redirection *head;
-	
+
 	c = 0;
 	n = 0;
 	index = i;
